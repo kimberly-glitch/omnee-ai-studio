@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { SERVICES } from '../data';
-import { Truck, Zap, Shield, ChevronRight, Search, Clock, Award, ArrowRight, ClipboardCheck, Phone, MapPin } from 'lucide-react';
+import { Truck, Zap, Shield, ChevronRight, Search, Clock, Award, ArrowRight, ClipboardCheck, Phone, MapPin, Activity, Calendar } from 'lucide-react';
 
 interface HomeViewProps {
   onNavigate: (section: string) => void;
@@ -29,28 +29,28 @@ export default function HomeView({ onNavigate, onOpenTracking }: HomeViewProps) 
   return (
     <div className="space-y-20 pb-16">
       {/* 1. Hero Section */}
-      <section className="relative overflow-hidden bg-slate-950 text-white py-24 md:py-32 px-4 sm:px-6 lg:px-8">
+      <section className="relative overflow-hidden bg-slate-950 text-white pt-8 pb-14 sm:py-20 md:py-32 px-4 sm:px-6 lg:px-8">
         {/* Subtle decorative grid/overlay */}
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#0f172a_1px,transparent_1px),linear-gradient(to_bottom,#0f172a_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] opacity-25"></div>
         <div className="absolute top-0 right-0 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl"></div>
         <div className="absolute bottom-0 left-0 w-96 h-96 bg-blue-400/10 rounded-full blur-3xl"></div>
 
-        <div className="max-w-7xl mx-auto relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+        <div className="max-w-7xl mx-auto relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-10 sm:gap-12 items-center">
           {/* Left Hero Text */}
-          <div className="lg:col-span-7 space-y-6 text-left">
+          <div className="lg:col-span-7 space-y-4 sm:space-y-6 text-left">
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-blue-500/10 text-blue-400 border border-blue-500/20">
               <span className="w-2 h-2 rounded-full bg-blue-400 animate-pulse"></span>
-              <span>Flagstaff Medical Courier Services</span>
+              <span>Flagstaff Diagnostic & Veterinary Specimen Logistics</span>
             </div>
             
-            <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-white leading-[1.1]">
+            <h1 className="text-3xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-white leading-[1.15]">
               Omnee Courier Solutions<br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-blue-200 text-2xl sm:text-3xl md:text-4xl block mt-3 font-semibold">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-blue-200 text-xl sm:text-3xl md:text-4xl block mt-2 sm:mt-3 font-semibold">
                 Driven by Life. Moved by Care.
               </span>
             </h1>
 
-            <p className="text-slate-300 text-base sm:text-lg max-w-2xl leading-relaxed font-normal">
+            <p className="text-slate-300 text-sm sm:text-base md:text-lg max-w-2xl leading-relaxed font-normal">
               Rooted in the concept of being all-encompassing, Omnee handles every dispatch as a complete local logistics partner. We offer a level of local availability that big companies simply cannot match. We are here to fill every gap with 'The Standard of One'—making a difference one delivery at a time, until we are the only solution you count on.
             </p>
 
@@ -269,25 +269,28 @@ export default function HomeView({ onNavigate, onOpenTracking }: HomeViewProps) 
               >
                 <div className="space-y-4">
                   <div className="w-10 h-10 rounded-xl bg-slate-50 text-slate-900 flex items-center justify-center font-bold">
-                    {svc.id === 'medical-specimen' ? <Shield className="w-5 h-5 text-blue-600" /> : 
-                     svc.id === 'medical-records' ? <ClipboardCheck className="w-5 h-5 text-indigo-500" /> : 
+                    {svc.id === 'veterinary-routes' ? <Activity className="w-5 h-5 text-blue-600" /> : 
+                     svc.id === 'medical-specimen' ? <Shield className="w-5 h-5 text-indigo-600" /> : 
                      <Zap className="w-5 h-5 text-rose-500" />}
                   </div>
                   <div>
                     <h3 className="text-base font-bold text-slate-900 group-hover:text-blue-700 transition-colors leading-snug">{svc.title}</h3>
+                    {svc.subtitle && (
+                      <p className="text-xs text-blue-600 font-semibold mt-0.5">{svc.subtitle}</p>
+                    )}
                     <p className="text-xs text-slate-400 font-semibold uppercase mt-0.5 tracking-wider">{svc.deliveryTime}</p>
                   </div>
                   <p className="text-slate-500 text-xs leading-relaxed">{svc.shortDesc}</p>
                 </div>
-                <div className="pt-6 mt-6 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-slate-900">
-                  <span className="text-slate-700">
-                    {svc.id === 'stat-emergency' ? 'Contact Dispatch for Priority STAT Rates' : `Starting at $${svc.basePrice.toFixed(2)}`}
+                <div className="pt-6 mt-6 border-t border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs font-bold text-slate-900">
+                  <span className="text-slate-700 text-xs font-semibold">
+                    {svc.priceTag || (svc.id === 'stat-emergency' ? 'Contact Dispatch for Priority STAT Rates' : `Starting at $${svc.basePrice.toFixed(2)}`)}
                   </span>
                   <button 
                     onClick={() => onNavigate('services')} 
-                    className="text-blue-700 hover:text-blue-800 flex items-center gap-1 group-hover:translate-x-1 transition-transform"
+                    className="text-blue-700 hover:text-blue-800 flex items-center gap-1 group-hover:translate-x-1 transition-transform shrink-0"
                   >
-                    <span>Inspect</span>
+                    <span>{svc.buttonText || 'Inspect'}</span>
                     <ArrowRight className="w-3.5 h-3.5" />
                   </button>
                 </div>
@@ -298,43 +301,45 @@ export default function HomeView({ onNavigate, onOpenTracking }: HomeViewProps) 
       </section>
 
       {/* 5. Compliance & Standards Section */}
-      <section className="bg-gradient-to-br from-slate-900 to-slate-950 text-white rounded-3xl p-8 sm:p-12 md:p-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 border border-slate-800 relative overflow-hidden text-left shadow-2xl">
-        {/* Shaded visual background effect using brand colors */}
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#1e293b_1px,transparent_1px),linear-gradient(to_bottom,#1e293b_1px,transparent_1px)] bg-[size:4rem_4rem] opacity-10"></div>
-        <div className="absolute top-0 right-0 w-80 h-80 bg-blue-600/10 rounded-full blur-3xl pointer-events-none"></div>
-        <div className="absolute -left-10 -bottom-10 w-72 h-72 bg-blue-500/5 rounded-full blur-3xl pointer-events-none"></div>
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="bg-gradient-to-br from-slate-900 to-slate-950 text-white rounded-3xl p-6 sm:p-12 md:p-16 border border-slate-800 relative overflow-hidden text-left shadow-2xl">
+          {/* Shaded visual background effect using brand colors */}
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,#1e293b_1px,transparent_1px),linear-gradient(to_bottom,#1e293b_1px,transparent_1px)] bg-[size:4rem_4rem] opacity-10"></div>
+          <div className="absolute top-0 right-0 w-80 h-80 bg-blue-600/10 rounded-full blur-3xl pointer-events-none"></div>
+          <div className="absolute -left-10 -bottom-10 w-72 h-72 bg-blue-500/5 rounded-full blur-3xl pointer-events-none"></div>
 
-        <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-          <div className="lg:col-span-7 space-y-4">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-blue-500/10 text-blue-400 border border-blue-500/20">
-              <Award className="w-4 h-4" />
-              <span>Fully certified and compliant.</span>
-            </div>
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight leading-tight">
-              Omnee Courier Solutions is proud to be HIPAA and OSHA compliant.
-            </h2>
-            <p className="text-slate-300 text-sm sm:text-base leading-relaxed">
-              We maintain rigorous standards to ensure privacy, security, and integrity of every delivery. Every medical sample, medication, and clinical asset is handled by trained, HIPAA-certified couriers with strict compliance.
-            </p>
-          </div>
-          <div className="lg:col-span-5 grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div className="bg-slate-900/65 border border-slate-800 p-5 rounded-2xl space-y-2">
-              <div className="w-10 h-10 rounded-xl bg-blue-500/10 text-blue-400 flex items-center justify-center font-bold">
-                <Shield className="w-5 h-5" />
+          <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+            <div className="lg:col-span-7 space-y-4">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-blue-500/10 text-blue-400 border border-blue-500/20">
+                <Award className="w-4 h-4" />
+                <span>Fully certified and compliant.</span>
               </div>
-              <h3 className="text-sm font-bold text-white">HIPAA Certified</h3>
-              <p className="text-slate-400 text-xs leading-relaxed">
-                Full compliance with patient privacy and protected health information (PHI) secure protocols.
+              <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight leading-tight">
+                Omnee Courier Solutions is proud to be HIPAA and OSHA compliant.
+              </h2>
+              <p className="text-slate-300 text-sm sm:text-base leading-relaxed">
+                We maintain rigorous standards to ensure privacy, security, and integrity of every delivery. Every medical sample, medication, and clinical asset is handled by trained, HIPAA-certified couriers with strict compliance.
               </p>
             </div>
-            <div className="bg-slate-900/65 border border-slate-800 p-5 rounded-2xl space-y-2">
-              <div className="w-10 h-10 rounded-xl bg-blue-500/10 text-blue-400 flex items-center justify-center font-bold">
-                <Clock className="w-5 h-5" />
+            <div className="lg:col-span-5 grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="bg-slate-900/65 border border-slate-800 p-5 rounded-2xl space-y-2">
+                <div className="w-10 h-10 rounded-xl bg-blue-500/10 text-blue-400 flex items-center justify-center font-bold">
+                  <Shield className="w-5 h-5" />
+                </div>
+                <h3 className="text-sm font-bold text-white">HIPAA Certified</h3>
+                <p className="text-slate-400 text-xs leading-relaxed">
+                  Full compliance with patient privacy and protected health information (PHI) secure protocols.
+                </p>
               </div>
-              <h3 className="text-sm font-bold text-white">OSHA Compliant</h3>
-              <p className="text-slate-400 text-xs leading-relaxed">
-                Strict adherence to safe handling of biohazards, medical waste, and temperature-sensitive specimens.
-              </p>
+              <div className="bg-slate-900/65 border border-slate-800 p-5 rounded-2xl space-y-2">
+                <div className="w-10 h-10 rounded-xl bg-blue-500/10 text-blue-400 flex items-center justify-center font-bold">
+                  <Clock className="w-5 h-5" />
+                </div>
+                <h3 className="text-sm font-bold text-white">OSHA Compliant</h3>
+                <p className="text-slate-400 text-xs leading-relaxed">
+                  Strict adherence to safe handling of biohazards, medical waste, and temperature-sensitive specimens.
+                </p>
+              </div>
             </div>
           </div>
         </div>
@@ -342,7 +347,7 @@ export default function HomeView({ onNavigate, onOpenTracking }: HomeViewProps) 
 
       {/* 7. Corporate Account CTA Banner */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="bg-slate-950 text-white rounded-3xl p-8 sm:p-12 md:p-16 relative overflow-hidden text-left border border-slate-900">
+        <div className="bg-slate-950 text-white rounded-3xl p-6 sm:p-12 md:p-16 relative overflow-hidden text-left border border-slate-900">
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_50%_at_50%_0%,rgba(37,99,235,0.08),transparent_100%)]"></div>
           
           <div className="max-w-3xl relative z-10 space-y-6">

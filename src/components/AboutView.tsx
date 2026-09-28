@@ -28,7 +28,7 @@ export default function AboutView() {
   return (
     <div className="space-y-20 pb-20">
       {/* Page Header */}
-      <section className="bg-slate-900 text-white py-16 px-4 sm:px-6 lg:px-8 border-b border-slate-800 text-center relative overflow-hidden">
+      <section className="bg-slate-900 text-white py-10 sm:py-16 px-4 sm:px-6 lg:px-8 border-b border-slate-800 text-center relative overflow-hidden">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-full bg-[radial-gradient(ellipse_60%_50%_at_50%_100%,rgba(37,99,235,0.07),transparent_100%)]"></div>
         <div className="max-w-4xl mx-auto relative z-10 space-y-4">
           <span className="text-xs font-bold uppercase tracking-widest text-blue-400 block">Our Company</span>

@@ -2,52 +2,61 @@ import { ServiceDetail, Testimonial, TeamMember, Shipment } from './types';
 
 export const SERVICES: ServiceDetail[] = [
   {
+    id: 'veterinary-routes',
+    title: 'Veterinary Diagnostic Routes',
+    subtitle: 'Scheduled Sweeps & Reference Lab Connections',
+    shortDesc: 'Recurring daily afternoon and evening sweeps timed around animal hospital, clinic, and diagnostic lab cutoffs. Temperature-controlled transport (ambient, refrigerated, frozen) for blood chemistry, urine profiles, cytology, and biopsy jars to meet IDEXX, Antech, and regional lab cutoffs.',
+    fullDesc: 'Recurring daily afternoon and evening sweeps timed around animal hospital, clinic, and diagnostic lab cutoffs. Temperature-controlled transport (ambient, refrigerated, frozen) for blood chemistry, urine profiles, cytology, and biopsy jars to meet IDEXX, Antech, and regional lab cutoffs.',
+    iconName: 'Activity',
+    features: [
+      'Scheduled Route Sweeps: Daily afternoon and evening sweeps timed around lab cutoffs',
+      'Temperature-controlled transport (ambient, refrigerated, frozen)',
+      'IDEXX, Antech & regional reference lab cutoff adherence',
+      'Blood chemistry, urine profiles, cytology & biopsy jars'
+    ],
+    basePrice: 35.00,
+    perMileRate: 1.50,
+    deliveryTime: 'Daily Afternoon & Evening Sweeps',
+    priceTag: 'Starting at $35.00 / Sweep • Recurring Route Discounts Available',
+    buttonText: 'Request Route Setup'
+  },
+  {
     id: 'medical-specimen',
     title: 'Medical Specimen Transport',
-    shortDesc: 'Standard and rush local routing for blood vials, urine specimens, and Category B diagnostic materials. Fully HIPAA and OSHA compliant with a locked chain of custody.',
-    fullDesc: 'Standard and rush local routing for blood vials, urine specimens, and Category B diagnostic materials. Fully HIPAA and OSHA compliant with a locked chain of custody.',
+    subtitle: 'Temperature-Monitored Clinical Transport',
+    shortDesc: 'Dedicated after-hours route coverage (Mon–Fri 5:00 PM to 6:00 AM) and standard local routing for blood vials, urine specimens, and Category B diagnostic materials. Fully HIPAA and OSHA compliant with a locked chain of custody.',
+    fullDesc: 'Dedicated after-hours route coverage (Mon–Fri 5:00 PM to 6:00 AM) and standard local routing for blood vials, urine specimens, and Category B diagnostic materials. Fully HIPAA and OSHA compliant with a locked chain of custody.',
     iconName: 'ShieldAlert',
     features: [
-      'Category B diagnostic material handling',
-      'OSHA and HIPAA compliant safety guidelines',
-      'Locked chain of custody and secure containment',
-      'Temperature logging (frozen, chilled, ambient)'
+      'Dedicated After-Hours Route Coverage: Mon–Fri 5:00 PM – 6:00 AM',
+      'Bridging critical overnight gaps for local clinics and reference labs',
+      'Category B diagnostic material handling with locked chain of custody',
+      'OSHA and HIPAA certified compliance with temperature logging'
     ],
     basePrice: 45.00,
     perMileRate: 1.85,
-    deliveryTime: 'Standard or Rush'
-  },
-  {
-    id: 'medical-records',
-    title: 'Medical Records Courier',
-    shortDesc: 'Secure, direct document transfer across Flagstaff for clinics and medical administration. Strict HIPAA compliance without the need for temperature control.',
-    fullDesc: 'Secure, direct document transfer across Flagstaff for clinics and medical administration. Strict HIPAA compliance without the need for temperature control.',
-    iconName: 'ClipboardCheck',
-    features: [
-      'Confidential document and medical chart transfer',
-      'Strict HIPAA compliance protocols enforced',
-      'Secure locking bags and document briefcases',
-      'Instant signature and handover proof'
-    ],
-    basePrice: 20.00,
-    perMileRate: 1.00,
-    deliveryTime: 'Same-Day or Scheduled'
+    deliveryTime: 'After-Hours: Mon–Fri 5PM–6AM & Sweeps',
+    priceTag: 'Starting at $45.00 Base • Tiered Mileage',
+    buttonText: 'Request Route Setup'
   },
   {
     id: 'stat-emergency',
     title: 'STAT Emergency Dispatches',
-    shortDesc: 'Immediate, drop-everything response available 24/7, including holidays and weekends. Bypasses standard routing for urgent, life-critical logistics.',
-    fullDesc: 'Immediate, drop-everything response available 24/7, including weekends around the clock, holidays, and nights. Bypasses standard routing for urgent, life-critical logistics.',
+    subtitle: '24/7 Drop-Everything Priority Logistics',
+    shortDesc: '24/7 Availability: Immediate drop-everything priority service, 365 days a year, including weekends and holidays. Bypasses standard routing for urgent, life-critical logistics.',
+    fullDesc: '24/7 Availability: Immediate drop-everything priority service, 365 days a year, including weekends and holidays. Bypasses standard routing for urgent, life-critical logistics.',
     iconName: 'Zap',
     features: [
-      'Immediate, drop-everything dispatch response',
-      'Available weekends around the clock and holidays',
-      'Bypasses standard routing for rapid delivery',
-      'Direct, dedicated courier communication'
+      'STAT Emergency Dispatches: 24/7 Availability (365 days a year, weekends & holidays)',
+      'Immediate drop-everything priority response & direct dedicated courier',
+      'Active Dispatch Desk: 24/7 on-call dispatch (928-547-1058)',
+      'Bypasses standard routing for rapid time-critical delivery'
     ],
     basePrice: 0.00,
     perMileRate: 0.00,
-    deliveryTime: 'Immediate / 24/7'
+    deliveryTime: '24/7 Availability • 365 Days / Year',
+    priceTag: 'Contact Dispatch for Priority STAT Rates',
+    buttonText: 'Request STAT Dispatch'
   }
 ];
 

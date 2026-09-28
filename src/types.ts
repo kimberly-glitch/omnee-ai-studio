@@ -24,6 +24,7 @@ export interface Shipment {
 export interface ServiceDetail {
   id: string;
   title: string;
+  subtitle?: string;
   shortDesc: string;
   fullDesc: string;
   iconName: string;
@@ -31,6 +32,17 @@ export interface ServiceDetail {
   basePrice: number;
   perMileRate: number;
   deliveryTime: string;
+  priceTag?: string;
+  buttonText?: string;
+}
+
+export interface DispatchQuoteRequest {
+  facilityName: string;
+  contactName: string;
+  phone: string;
+  email: string;
+  dispatchType: 'Scheduled Daily Veterinary Sweep' | 'Medical Specimen Route' | 'STAT Emergency Run';
+  routeAndTemperatureDetails: string;
 }
 
 export interface QuoteRequest {

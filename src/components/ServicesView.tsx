@@ -1,85 +1,99 @@
 import React, { useState } from 'react';
 import { SERVICES } from '../data';
-import { ServiceDetail } from '../types';
-import { Zap, Calendar, ShieldAlert, Package, Truck, ArrowRight, CheckCircle2, Calculator, Info, Check, ClipboardCheck } from 'lucide-react';
+import { 
+  Zap, 
+  Calendar, 
+  ShieldAlert, 
+  ArrowRight, 
+  CheckCircle2, 
+  Phone, 
+  Activity, 
+  Clock, 
+  Thermometer, 
+  MapPin, 
+  Building2, 
+  User, 
+  Mail, 
+  Check, 
+  AlertCircle 
+} from 'lucide-react';
 
 interface ServicesViewProps {
   onNavigate: (section: string) => void;
 }
 
+type DispatchType = 'Scheduled Daily Veterinary Sweep' | 'Medical Specimen Route' | 'STAT Emergency Run';
+
 export default function ServicesView({ onNavigate }: ServicesViewProps) {
-  const [selectedServiceId, setSelectedServiceId] = useState<string>(SERVICES[0].id);
-  const [originZip, setOriginZip] = useState('86001');
-  const [destZip, setDestZip] = useState('86015');
-  const [distance, setDistance] = useState(15);
-  const [weight, setWeight] = useState(5);
-  const [urgencyMultiplier, setUrgencyMultiplier] = useState(1); // 1 = Standard, 1.3 = Urgent (ASAP)
+  // Quote Request Form States
+  const [facilityName, setFacilityName] = useState('');
+  const [contactName, setContactName] = useState('');
+  const [phone, setPhone] = useState('');
+  const [email, setEmail] = useState('');
+  const [dispatchType, setDispatchType] = useState<DispatchType>('Scheduled Daily Veterinary Sweep');
+  const [routeDetails, setRouteDetails] = useState('');
   
-  const [calculationResult, setCalculationResult] = useState<{
-    base: number;
-    distanceCost: number;
-    weightCost: number;
-    total: number;
-    transitTime: string;
-    calculated: boolean;
-  } | null>(null);
+  const [formSubmitted, setFormSubmitted] = useState(false);
+  const [confirmationCode, setConfirmationCode] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
-  const [bookingSuccess, setBookingSuccess] = useState(false);
+  const scrollToQuoteForm = (type?: DispatchType) => {
+    if (type) {
+      setDispatchType(type);
+    }
+    const targetElement = document.getElementById('quote-request-section');
+    if (targetElement) {
+      targetElement.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
 
-  const handleCalculateRate = (e: React.FormEvent) => {
+  const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
-    const svc = SERVICES.find(s => s.id === selectedServiceId) || SERVICES[0];
-    
-    // Simple mock formula: Base + (Distance * perMileRate) + (weight * 0.45)
-    const base = svc.basePrice;
-    const distanceCost = distance * svc.perMileRate;
-    const weightCost = weight * 0.45;
-    
-    const rawTotal = (base + distanceCost + weightCost) * urgencyMultiplier;
-    
-    setCalculationResult({
-      base,
-      distanceCost,
-      weightCost,
-      total: parseFloat(rawTotal.toFixed(2)),
-      transitTime: svc.deliveryTime,
-      calculated: true
-    });
-    setBookingSuccess(false);
+    if (!facilityName.trim() || !contactName.trim() || !phone.trim() || !email.trim() || !routeDetails.trim()) {
+      setErrorMessage('Please complete all 4 required fields before submitting.');
+      return;
+    }
+
+    setErrorMessage('');
+    const randomCode = 'OMN-REQ-' + Math.floor(1000 + Math.random() * 9000);
+    setConfirmationCode(randomCode);
+    setFormSubmitted(true);
   };
 
-  const handleBookNow = () => {
-    setBookingSuccess(true);
-    // Auto clear success after 4 seconds
-    setTimeout(() => {
-      setBookingSuccess(false);
-    }, 4000);
+  const handleResetForm = () => {
+    setFacilityName('');
+    setContactName('');
+    setPhone('');
+    setEmail('');
+    setRouteDetails('');
+    setFormSubmitted(false);
+    setConfirmationCode('');
+    setErrorMessage('');
   };
 
-  // Icon switcher for each service category
-  const renderServiceIcon = (id: string, sizeClass = "w-6 h-6") => {
+  const renderServiceIcon = (id: string) => {
     switch (id) {
+      case 'veterinary-routes':
+        return <Activity className="w-6 h-6 text-blue-500" />;
       case 'medical-specimen':
-        return <ShieldAlert className={`${sizeClass} text-rose-500`} />;
-      case 'pharmaceutical-delivery':
-        return <Package className={`${sizeClass} text-blue-500`} />;
-      case 'medical-records':
-        return <ClipboardCheck className={`${sizeClass} text-indigo-500`} />;
-      case 'scheduled-backup':
-        return <Calendar className={`${sizeClass} text-emerald-500`} />;
+        return <ShieldAlert className="w-6 h-6 text-indigo-500" />;
+      case 'stat-emergency':
+        return <Zap className="w-6 h-6 text-rose-500" />;
       default:
-        return <Package className={`${sizeClass} text-slate-500`} />;
+        return <Calendar className="w-6 h-6 text-blue-500" />;
     }
   };
 
   return (
     <div className="space-y-20 pb-20">
       {/* Page Header */}
-      <section className="bg-slate-900 text-white py-16 px-4 sm:px-6 lg:px-8 border-b border-slate-800 text-center relative overflow-hidden">
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-full bg-[radial-gradient(ellipse_60%_50%_at_50%_100%,rgba(37,99,235,0.07),transparent_100%)]"></div>
+      <section className="bg-slate-900 text-white py-10 sm:py-16 px-4 sm:px-6 lg:px-8 border-b border-slate-800 text-center relative overflow-hidden">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-full bg-[radial-gradient(ellipse_60%_50%_at_50%_100%,rgba(37,99,235,0.08),transparent_100%)]"></div>
         <div className="max-w-4xl mx-auto relative z-10 space-y-4">
-          <span className="text-xs font-bold uppercase tracking-widest text-blue-400 block">Our Capabilities</span>
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-blue-500/10 text-blue-400 border border-blue-500/20">
+            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span>Flagstaff Diagnostic & Veterinary Specimen Logistics</span>
+          </div>
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-white leading-tight">
             Do You Have Transport Problems? Omnee Has Solutions.
           </h1>
@@ -89,105 +103,297 @@ export default function ServicesView({ onNavigate }: ServicesViewProps) {
         </div>
       </section>
 
-      {/* Services Breakdown Grid */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="space-y-16">
-          {SERVICES.map((svc, index) => {
-            const isEven = index % 2 === 0;
-            return (
-              <div 
-                key={svc.id} 
-                className={`flex flex-col lg:flex-row gap-12 items-stretch border-b border-slate-100 pb-16 last:border-b-0 last:pb-0 ${
-                  isEven ? '' : 'lg:flex-row-reverse'
-                }`}
-                id={`service-detail-${svc.id}`}
-              >
-                {/* Text Content */}
-                <div className="flex-1 space-y-6 text-left flex flex-col justify-center">
-                  <div className="flex items-center gap-3">
-                    <div className="p-3 bg-slate-50 border border-slate-100 rounded-2xl shadow-sm shrink-0">
-                      {renderServiceIcon(svc.id, "w-8 h-8")}
+      {/* Exact Operational Hours & Route Coverage Matrix */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" id="operational-hours-section">
+        <div className="bg-gradient-to-br from-slate-900 via-slate-900 to-slate-950 text-white rounded-3xl p-6 sm:p-8 md:p-10 border border-slate-800 shadow-xl relative overflow-hidden text-left">
+          <div className="absolute top-0 right-0 w-80 h-80 bg-blue-600/10 rounded-full blur-3xl pointer-events-none"></div>
+          
+          <div className="relative z-10 space-y-8">
+            {/* Section Header with Active Dispatch Desk */}
+            <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 border-b border-slate-800 pb-6">
+              <div className="space-y-2">
+                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-blue-500/10 text-blue-400 border border-blue-500/20 font-mono">
+                  <Clock className="w-3.5 h-3.5 text-blue-400" />
+                  <span>Flagstaff Operating Windows & Courier Availability</span>
+                </div>
+                <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white">
+                  Exact Operational Hours & Route Coverage
+                </h2>
+                <p className="text-slate-400 text-xs sm:text-sm max-w-2xl leading-relaxed">
+                  Tailored routing windows designed to seamlessly connect Flagstaff veterinary hospitals, diagnostic clinics, and regional reference labs with zero logistical gaps.
+                </p>
+              </div>
+
+              {/* Active Dispatch Desk Quick Card */}
+              <div className="bg-slate-950 border border-slate-800 rounded-2xl p-4 shrink-0 space-y-2 lg:text-right shadow-inner">
+                <div className="flex items-center gap-2 lg:justify-end">
+                  <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                  <span className="text-xs font-extrabold uppercase tracking-wider text-emerald-400">
+                    Active Dispatch Desk
+                  </span>
+                </div>
+                <div className="text-xs text-slate-300 font-medium">24/7 On-Call Live Dispatch Reachable At:</div>
+                <div className="pt-1 flex flex-wrap gap-3 lg:justify-end text-xs font-mono font-bold">
+                  <a href="tel:9285471058" className="text-white hover:text-blue-400 transition-colors flex items-center gap-1.5 bg-slate-900 px-2.5 py-1 rounded-lg border border-slate-800 whitespace-nowrap">
+                    <Phone className="w-3.5 h-3.5 text-blue-400 shrink-0" />
+                    <span className="whitespace-nowrap tabular-nums">928-547-1058</span>
+                  </a>
+                  <a href="mailto:Info@omneecourier.com" className="text-slate-300 hover:text-blue-400 transition-colors flex items-center gap-1.5 bg-slate-900 px-2.5 py-1 rounded-lg border border-slate-800 font-normal">
+                    <Mail className="w-3.5 h-3.5 text-blue-400" />
+                    <span>Info@omneecourier.com</span>
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            {/* 4-Item Operational Hours Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+              {/* 1. STAT Emergency Dispatches */}
+              <div className="bg-slate-950/75 border border-slate-800/90 rounded-2xl p-5 flex flex-col justify-between space-y-4 hover:border-slate-700 transition-colors shadow-sm">
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <div className="w-9 h-9 rounded-xl bg-rose-500/10 text-rose-400 flex items-center justify-center font-bold">
+                      <Zap className="w-5 h-5" />
                     </div>
-                    <div>
-                      <h2 className="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight">{svc.title}</h2>
-                      <span className="inline-flex items-center gap-1 text-[10px] bg-slate-100 text-slate-600 px-2 py-0.5 rounded-full font-bold uppercase tracking-wider mt-0.5">
-                        Est: {svc.deliveryTime}
-                      </span>
+                    <span className="text-[10px] font-mono font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-rose-500/15 text-rose-300 border border-rose-500/30">
+                      Tier 1 • Urgent
+                    </span>
+                  </div>
+                  <div>
+                    <h3 className="text-sm font-bold text-white">STAT Emergency Dispatches</h3>
+                    <div className="text-xs font-extrabold text-rose-400 mt-1 font-mono">
+                      24/7 Availability
                     </div>
                   </div>
+                  <p className="text-xs text-slate-400 leading-relaxed">
+                    Immediate drop-everything priority service, 365 days a year, including weekends and holidays.
+                  </p>
+                </div>
+                <div className="pt-3 border-t border-slate-900 text-[11px] text-slate-400 font-semibold flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-rose-400"></span>
+                  <span>Zero delays • 365 days a year</span>
+                </div>
+              </div>
 
-                  <p className="text-slate-500 text-sm sm:text-base leading-relaxed">
-                    {svc.fullDesc}
+              {/* 2. Dedicated After-Hours Route Coverage */}
+              <div className="bg-slate-950/75 border border-slate-800/90 rounded-2xl p-5 flex flex-col justify-between space-y-4 hover:border-slate-700 transition-colors shadow-sm">
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <div className="w-9 h-9 rounded-xl bg-blue-500/10 text-blue-400 flex items-center justify-center font-bold">
+                      <Clock className="w-5 h-5" />
+                    </div>
+                    <span className="text-[10px] font-mono font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-blue-500/15 text-blue-300 border border-blue-500/30">
+                      Tier 2 • Overnight
+                    </span>
+                  </div>
+                  <div>
+                    <h3 className="text-sm font-bold text-white">Dedicated After-Hours Route Coverage</h3>
+                    <div className="text-xs font-extrabold text-blue-400 mt-1 font-mono">
+                      Mon–Fri: 5:00 PM – 6:00 AM
+                    </div>
+                  </div>
+                  <p className="text-xs text-slate-400 leading-relaxed">
+                    Monday through Friday from 5:00 PM to 6:00 AM (Bridging critical overnight gaps for local clinics and reference labs).
+                  </p>
+                </div>
+                <div className="pt-3 border-t border-slate-900 text-[11px] text-slate-400 font-semibold flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-blue-400"></span>
+                  <span>Overnight specimen stabilization</span>
+                </div>
+              </div>
+
+              {/* 3. Scheduled Route Sweeps */}
+              <div className="bg-slate-950/75 border border-slate-800/90 rounded-2xl p-5 flex flex-col justify-between space-y-4 hover:border-slate-700 transition-colors shadow-sm">
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <div className="w-9 h-9 rounded-xl bg-indigo-500/10 text-indigo-400 flex items-center justify-center font-bold">
+                      <Calendar className="w-5 h-5" />
+                    </div>
+                    <span className="text-[10px] font-mono font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-indigo-500/15 text-indigo-300 border border-indigo-500/30">
+                      Tier 3 • Daily Sweeps
+                    </span>
+                  </div>
+                  <div>
+                    <h3 className="text-sm font-bold text-white">Scheduled Route Sweeps</h3>
+                    <div className="text-xs font-extrabold text-indigo-400 mt-1 font-mono">
+                      Afternoon & Evening Sweeps
+                    </div>
+                  </div>
+                  <p className="text-xs text-slate-400 leading-relaxed">
+                    Recurring daily afternoon and evening sweeps timed around animal hospital, clinic, and diagnostic lab cutoffs.
+                  </p>
+                </div>
+                <div className="pt-3 border-t border-slate-900 text-[11px] text-slate-400 font-semibold flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-indigo-400"></span>
+                  <span>Synced with lab flight cutoffs</span>
+                </div>
+              </div>
+
+              {/* 4. Active Dispatch Desk */}
+              <div className="bg-slate-950/75 border border-slate-800/90 rounded-2xl p-5 flex flex-col justify-between space-y-4 hover:border-slate-700 transition-colors shadow-sm">
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <div className="w-9 h-9 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center font-bold">
+                      <Phone className="w-5 h-5" />
+                    </div>
+                    <span className="text-[10px] font-mono font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">
+                      Tier 4 • 24/7 Desk
+                    </span>
+                  </div>
+                  <div>
+                    <h3 className="text-sm font-bold text-white">Active Dispatch Desk</h3>
+                    <div className="text-xs font-extrabold text-emerald-400 mt-1 font-mono">
+                      24/7 On-Call Dispatch
+                    </div>
+                  </div>
+                  <p className="text-xs text-slate-400 leading-relaxed">
+                    Active 24/7 on-call dispatch desk reachable at 928-547-1058 or Info@omneecourier.com.
+                  </p>
+                </div>
+                <div className="pt-3 border-t border-slate-900 text-xs font-bold font-mono">
+                  <a href="tel:9285471058" className="text-blue-400 hover:text-blue-300 flex items-center gap-1.5 transition-colors whitespace-nowrap">
+                    <Phone className="w-3.5 h-3.5 shrink-0" />
+                    <span className="whitespace-nowrap tabular-nums">Call: 928-547-1058</span>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Services Section (3-Card Grid) */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10" id="services-grid-section">
+        <div className="text-center max-w-3xl mx-auto space-y-3">
+          <span className="text-xs font-bold uppercase tracking-widest text-blue-700 block">Specialized Transport</span>
+          <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
+            Tailored Courier Routes for Northern Arizona
+          </h2>
+          <p className="text-slate-500 text-sm sm:text-base leading-relaxed">
+            Temperature-controlled, chain-of-custody certified transport scheduled to sync directly with your facility's operational workflow.
+          </p>
+        </div>
+
+        {/* 3-Card Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-stretch">
+          {SERVICES.map((svc) => {
+            const isPrimary = svc.id === 'veterinary-routes';
+            const targetDispatchType: DispatchType = 
+              svc.id === 'veterinary-routes' 
+                ? 'Scheduled Daily Veterinary Sweep' 
+                : svc.id === 'medical-specimen' 
+                  ? 'Medical Specimen Route' 
+                  : 'STAT Emergency Run';
+
+            return (
+              <div
+                key={svc.id}
+                id={`service-card-${svc.id}`}
+                className={`rounded-3xl p-7 sm:p-8 flex flex-col justify-between text-left transition-all duration-200 relative ${
+                  isPrimary
+                    ? 'bg-gradient-to-b from-slate-900 to-slate-950 text-white border-2 border-blue-500 shadow-xl lg:-translate-y-2'
+                    : 'bg-white text-slate-900 border border-slate-200/80 shadow-sm hover:shadow-md'
+                }`}
+              >
+                {/* Primary Card Ribbon */}
+                {isPrimary && (
+                  <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-blue-600 text-white text-[10px] font-extrabold uppercase tracking-widest px-4 py-1 rounded-full shadow-md">
+                    Featured Primary Route
+                  </div>
+                )}
+
+                <div className="space-y-6">
+                  {/* Icon & Service Heading */}
+                  <div className="flex items-start justify-between gap-4">
+                    <div className={`w-12 h-12 rounded-2xl flex items-center justify-center font-bold ${
+                      isPrimary ? 'bg-blue-950/80 border border-blue-800' : 'bg-slate-50 border border-slate-100'
+                    }`}>
+                      {renderServiceIcon(svc.id)}
+                    </div>
+                    <span className={`text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full ${
+                      isPrimary 
+                        ? 'bg-blue-500/10 text-blue-400 border border-blue-500/20 font-mono' 
+                        : 'bg-slate-100 text-slate-600 font-semibold'
+                    }`}>
+                      {svc.deliveryTime}
+                    </span>
+                  </div>
+
+                  <div>
+                    <h3 className={`text-xl sm:text-2xl font-extrabold tracking-tight ${
+                      isPrimary ? 'text-white' : 'text-slate-900'
+                    }`}>
+                      {svc.title}
+                    </h3>
+                    {svc.subtitle && (
+                      <p className={`text-xs font-bold mt-1 ${
+                        isPrimary ? 'text-blue-400' : 'text-blue-700'
+                      }`}>
+                        {svc.subtitle}
+                      </p>
+                    )}
+                  </div>
+
+                  {/* Description */}
+                  <p className={`text-xs sm:text-sm leading-relaxed ${
+                    isPrimary ? 'text-slate-300' : 'text-slate-600'
+                  }`}>
+                    {svc.shortDesc}
                   </p>
 
-                  <div className="space-y-3 bg-slate-50 p-6 rounded-2xl border border-slate-100">
-                    <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Core Service Inclusions</h4>
-                    <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  {/* Core Features List */}
+                  <div className={`p-4 rounded-2xl border space-y-2.5 ${
+                    isPrimary ? 'bg-slate-900/60 border-slate-800' : 'bg-slate-50 border-slate-100'
+                  }`}>
+                    <span className={`text-[10px] font-bold uppercase tracking-wider block ${
+                      isPrimary ? 'text-slate-400' : 'text-slate-500'
+                    }`}>
+                      Key Route Specifications
+                    </span>
+                    <ul className="space-y-2">
                       {svc.features.map((feature, idx) => (
-                        <li key={idx} className="flex items-start gap-2 text-xs text-slate-600 font-medium">
-                          <CheckCircle2 className="w-4 h-4 text-blue-600 shrink-0 mt-0.5" />
-                          <span>{feature}</span>
+                        <li key={idx} className="flex items-start gap-2 text-xs font-medium">
+                          <CheckCircle2 className={`w-4 h-4 shrink-0 mt-0.5 ${
+                            isPrimary ? 'text-blue-400' : 'text-blue-600'
+                          }`} />
+                          <span className={isPrimary ? 'text-slate-200' : 'text-slate-700'}>{feature}</span>
                         </li>
                       ))}
                     </ul>
                   </div>
-
-                  <div className="flex items-center justify-between p-4 bg-blue-50/50 border border-blue-100 rounded-xl text-xs font-bold text-slate-900 max-w-md">
-                    <div className="space-y-0.5 text-left">
-                      <span className="block text-slate-500 font-medium text-[10px] uppercase">Starting Base Rate</span>
-                      <span className="text-sm font-extrabold text-blue-800">
-                        {svc.id === 'stat-emergency' ? 'Contact Dispatch for Priority STAT Rates' : `$${svc.basePrice.toFixed(2)} + $${svc.perMileRate.toFixed(2)}/mile`}
-                      </span>
-                    </div>
-                    <button
-                      onClick={() => {
-                        setSelectedServiceId(svc.id);
-                        document.getElementById('rate-estimator-section')?.scrollIntoView({ behavior: 'smooth' });
-                      }}
-                      className="bg-blue-700 hover:bg-blue-800 active:scale-95 text-white py-2 px-4 rounded transition-colors flex items-center gap-1 shrink-0"
-                    >
-                      <span>Estimate Cost</span>
-                      <ArrowRight className="w-3.5 h-3.5" />
-                    </button>
-                  </div>
                 </div>
 
-                {/* Decorative visual block */}
-                <div className="flex-1 flex items-center justify-center relative">
-                  <div className="w-full h-80 lg:h-full min-h-[300px] bg-slate-900 rounded-3xl p-8 text-white relative overflow-hidden flex flex-col justify-between border border-slate-800">
-                    <div className="absolute inset-0 bg-[linear-gradient(to_right,#1e293b_1px,transparent_1px),linear-gradient(to_bottom,#1e293b_1px,transparent_1px)] bg-[size:3rem_3rem] opacity-20"></div>
-                    <div className="absolute bottom-0 right-0 w-64 h-64 bg-blue-500/5 rounded-full blur-3xl"></div>
-                    
-                    {/* Visual Elements inside the container */}
-                    <div className="flex justify-between items-center relative z-10">
-                      <span className="text-[10px] font-mono tracking-widest text-blue-400 uppercase">OMNEE • GLOBAL CODE: {svc.id.toUpperCase()}</span>
-                      <span className="text-[10px] font-mono text-slate-400 uppercase">AUDITED & SECURE</span>
-                    </div>
-
-                    <div className="space-y-2 text-left relative z-10">
-                      <span className="text-[10px] font-bold tracking-widest text-blue-400 uppercase">VEHICLE INSTRUCTIONS</span>
-                      <h3 className="text-xl sm:text-2xl font-bold font-mono tracking-tight text-white leading-tight">
-                        {svc.id === 'medical-specimen' ? 'MED_SPECURE_TEMP_STABLE' : 
-                         svc.id === 'medical-records' ? 'RECORDS_HIPAA_SECURE' : 'EMERGENCY_STAT_DISPATCH'}
-                      </h3>
-                      <p className="text-xs text-slate-400 font-mono">
-                        {svc.id === 'medical-specimen' ? 'HIPAA Chain-Of-Custody • Climate containment logged hourly.' :
-                         svc.id === 'medical-records' ? 'Strict HIPAA chain of custody • Document lockboxes utilized.' :
-                         'Bypasses standard routing for life-critical logistics • 4WD weather readiness.'}
-                      </p>
-                    </div>
-
-                    <div className="bg-slate-950/80 border border-slate-800/80 p-4 rounded-xl flex items-center justify-between text-xs font-mono relative z-10">
-                      <div>
-                        <span className="block text-slate-500 text-[9px] uppercase">Est. Dispatch Time</span>
-                        <span className="text-white font-bold">{svc.id === 'stat-emergency' ? 'Immediate STAT' : svc.id === 'medical-specimen' ? 'Standard / Rush' : 'Scheduled'}</span>
-                      </div>
-                      <div className="text-right">
-                        <span className="block text-slate-500 text-[9px] uppercase">Compliance Flag</span>
-                        <span className="text-blue-400 font-bold">100% PASS</span>
-                      </div>
-                    </div>
+                {/* Pricing & CTA Button */}
+                <div className={`mt-8 pt-6 border-t space-y-4 ${
+                  isPrimary ? 'border-slate-800' : 'border-slate-100'
+                }`}>
+                  <div>
+                    <span className={`block text-[10px] font-bold uppercase tracking-wider ${
+                      isPrimary ? 'text-slate-400' : 'text-slate-500'
+                    }`}>
+                      Pricing Structure
+                    </span>
+                    <span className={`block text-xs sm:text-sm font-extrabold mt-0.5 ${
+                      isPrimary ? 'text-blue-300' : 'text-slate-900'
+                    }`}>
+                      {svc.priceTag}
+                    </span>
                   </div>
+
+                  <button
+                    onClick={() => scrollToQuoteForm(targetDispatchType)}
+                    className={`w-full py-3.5 px-5 rounded-xl font-bold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 active:scale-95 shadow-md ${
+                      isPrimary
+                        ? 'bg-blue-600 hover:bg-blue-500 text-white hover:shadow-blue-500/25'
+                        : svc.id === 'stat-emergency'
+                          ? 'bg-slate-900 hover:bg-slate-800 text-white'
+                          : 'bg-blue-700 hover:bg-blue-800 text-white'
+                    }`}
+                    id={`btn-select-${svc.id}`}
+                  >
+                    <span>{svc.buttonText || 'Request Route Setup'}</span>
+                    <ArrowRight className="w-4 h-4 stroke-[2.5]" />
+                  </button>
                 </div>
               </div>
             );
@@ -195,296 +401,226 @@ export default function ServicesView({ onNavigate }: ServicesViewProps) {
         </div>
       </section>
 
-      {/* Interactive Quick Rate Estimator Calculator */}
-      <section id="rate-estimator-section" className="bg-slate-950 py-20 border-t border-slate-900 text-white relative overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_50%_at_50%_0%,rgba(37,99,235,0.05),transparent_100%)]"></div>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="text-center max-w-2xl mx-auto space-y-4 mb-12">
-            <span className="text-xs font-bold uppercase tracking-widest text-blue-400 block">Transparent Pricing</span>
+      {/* Simple Quote Request Form (Replacing the Complex Estimator) */}
+      <section 
+        id="quote-request-section" 
+        className="bg-slate-950 py-20 border-t border-slate-900 text-white relative overflow-hidden"
+      >
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_50%_at_50%_0%,rgba(37,99,235,0.07),transparent_100%)] pointer-events-none"></div>
+        <div className="absolute top-0 right-0 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl pointer-events-none"></div>
+
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 space-y-8">
+          {/* Header */}
+          <div className="text-center space-y-3">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold bg-blue-500/10 text-blue-400 border border-blue-500/20">
+              <Clock className="w-3.5 h-3.5" />
+              <span>Direct Dispatch Coordination</span>
+            </div>
             <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
-              Interactive Quick Rate Estimator
+              Request Route Setup or STAT Dispatch
             </h2>
-            <p className="text-slate-300 text-sm leading-relaxed">
-              Our transparent baseline rates provide a predictable advantage over generic gig-economy apps with unstable surge pricing and hidden fees. Set your parameters to estimate your delivery instantly.
+            <p className="text-slate-300 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed">
+              Submit your clinic or facility details below. Our Flagstaff dispatch desk will immediately review your pickup timing, cut-off schedules, and temperature requirements.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
-            {/* Form Fields */}
-            <div className="lg:col-span-7 bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 space-y-6 text-left">
-              <h3 className="text-lg font-bold text-white border-b border-slate-800 pb-3 flex items-center gap-2">
-                <Calculator className="w-5 h-5 text-blue-400" />
-                <span>Estimate Parameters</span>
-              </h3>
-
-              <form onSubmit={handleCalculateRate} className="space-y-5">
-                {/* Service Select */}
-                <div>
-                  <label htmlFor="est-service-level" className="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">
-                    Service Level Required
-                  </label>
-                  <select
-                    id="est-service-level"
-                    value={selectedServiceId}
-                    onChange={(e) => setSelectedServiceId(e.target.value)}
-                    className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 text-slate-200"
-                  >
-                    {SERVICES.map(s => (
-                      <option key={s.id} value={s.id}>{s.title}</option>
-                    ))}
-                  </select>
+          {/* Form Container */}
+          <div className="bg-slate-900/90 border border-slate-800 rounded-3xl p-6 sm:p-10 shadow-2xl relative">
+            {formSubmitted ? (
+              /* Success Confirmation Card */
+              <div className="text-center py-8 px-4 space-y-6 animate-fadeIn" id="dispatch-request-confirmation">
+                <div className="w-16 h-16 rounded-full bg-blue-500/10 border border-blue-500/30 text-blue-400 flex items-center justify-center mx-auto">
+                  <Check className="w-8 h-8 stroke-[2.5]" />
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  {/* Origin ZIP */}
-                  <div>
-                    <label htmlFor="est-origin-zip" className="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">
-                      Origin Zip Code
-                    </label>
-                    <input
-                      type="text"
-                      id="est-origin-zip"
-                      maxLength={5}
-                      value={originZip}
-                      onChange={(e) => setOriginZip(e.target.value.replace(/\D/g, ''))}
-                      className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 font-semibold font-mono text-slate-200"
-                    />
-                  </div>
-
-                  {/* Destination ZIP */}
-                  <div>
-                    <label htmlFor="est-dest-zip" className="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">
-                      Destination Zip Code
-                    </label>
-                    <input
-                      type="text"
-                      id="est-dest-zip"
-                      maxLength={5}
-                      value={destZip}
-                      onChange={(e) => setDestZip(e.target.value.replace(/\D/g, ''))}
-                      className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 font-semibold font-mono text-slate-200"
-                    />
-                  </div>
-                </div>
-
-                {/* Distance Slider */}
-                <div>
-                  <div className="flex justify-between text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">
-                    <label htmlFor="est-distance">Estimated Transit Distance</label>
-                    <span className="text-blue-400 font-mono text-sm">{distance} Miles</span>
-                  </div>
-                  <input
-                    type="range"
-                    id="est-distance"
-                    min="5"
-                    max="150"
-                    step="5"
-                    value={distance}
-                    onChange={(e) => setDistance(parseInt(e.target.value))}
-                    className="w-full h-2 bg-slate-950 rounded-lg appearance-none cursor-pointer accent-blue-600 border border-slate-800"
-                  />
-                  <span className="text-[10px] text-slate-500 mt-1 block">Local metropolitan courier runs typically span 5 to 60 miles.</span>
-                </div>
-
-                {/* Weight Slider */}
-                <div>
-                  <div className="flex justify-between text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">
-                    <label htmlFor="est-weight">Package Spec Weight</label>
-                    <span className="text-blue-400 font-mono text-sm">{weight} Lbs</span>
-                  </div>
-                  <input
-                    type="range"
-                    id="est-weight"
-                    min="1"
-                    max="75"
-                    value={weight}
-                    onChange={(e) => setWeight(parseInt(e.target.value))}
-                    className="w-full h-2 bg-slate-950 rounded-lg appearance-none cursor-pointer accent-blue-600 border border-slate-800"
-                  />
-                  <span className="text-[10px] text-slate-500 mt-1 block">Rates include standard flat weight up to 5 lbs. Heavy weight surcharges apply past that.</span>
-                </div>
-
-                {/* Dispatch Urgency Radio Buttons */}
-                <div>
-                  <span className="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">
-                    Urgency & Dispatch Speed
+                <div className="space-y-2">
+                  <span className="text-xs font-mono font-bold tracking-widest text-blue-400 uppercase">
+                    CONFIRMATION CODE: {confirmationCode}
                   </span>
-                  <div className="grid grid-cols-2 gap-3">
-                    <label className={`border rounded-xl p-3 flex flex-col justify-between cursor-pointer transition-all ${
-                      urgencyMultiplier === 1 
-                        ? 'border-blue-500 bg-blue-950/20 text-white' 
-                        : 'border-slate-800 bg-slate-950 hover:bg-slate-900 text-slate-400'
-                    }`}>
-                      <input 
-                        type="radio" 
-                        name="urgency" 
-                        checked={urgencyMultiplier === 1}
-                        onChange={() => setUrgencyMultiplier(1)}
-                        className="sr-only" 
-                      />
-                      <span className="text-xs font-bold block mb-0.5">Standard Dispatch</span>
-                      <span className="text-[10px] text-slate-400 block">Default scheduled / courier tier routing</span>
-                    </label>
+                  <h3 className="text-2xl font-bold text-white tracking-tight">
+                    Dispatch Request Received
+                  </h3>
+                  <p className="text-slate-300 text-sm max-w-lg mx-auto leading-relaxed">
+                    Thank you, <strong className="text-white">{contactName}</strong>. Your request for <strong className="text-white">{facilityName}</strong> has been transmitted directly to our on-duty Flagstaff dispatch desk.
+                  </p>
+                </div>
 
-                    <label className={`border rounded-xl p-3 flex flex-col justify-between cursor-pointer transition-all ${
-                      urgencyMultiplier === 1.3 
-                        ? 'border-blue-500 bg-blue-950/20 text-white' 
-                        : 'border-slate-800 bg-slate-950 hover:bg-slate-900 text-slate-400'
-                    }`}>
-                      <input 
-                        type="radio" 
-                        name="urgency" 
-                        checked={urgencyMultiplier === 1.3}
-                        onChange={() => setUrgencyMultiplier(1.3)}
-                        className="sr-only" 
-                      />
-                      <span className="text-xs font-bold block mb-0.5">STAT Immediate (+30%)</span>
-                      <span className="text-[10px] text-slate-400 block">Emergency courier rerouting assigned instantly</span>
-                    </label>
+                {/* Summary Box */}
+                <div className="bg-slate-950 border border-slate-800 rounded-2xl p-5 max-w-md mx-auto text-left space-y-2.5 text-xs">
+                  <div className="flex justify-between py-1 border-b border-slate-900">
+                    <span className="text-slate-400 font-medium">Selected Service:</span>
+                    <span className="text-blue-400 font-bold">{dispatchType}</span>
+                  </div>
+                  <div className="flex justify-between py-1 border-b border-slate-900">
+                    <span className="text-slate-400 font-medium">Contact Phone:</span>
+                    <span className="text-slate-200 font-mono font-semibold">{phone}</span>
+                  </div>
+                  <div className="flex justify-between py-1 border-b border-slate-900">
+                    <span className="text-slate-400 font-medium">Contact Email:</span>
+                    <span className="text-slate-200 font-semibold">{email}</span>
+                  </div>
+                  <div className="pt-1">
+                    <span className="text-slate-400 block mb-1 font-medium">Route & Temp Specifications:</span>
+                    <p className="text-slate-300 font-mono text-[11px] bg-slate-900 p-2.5 rounded-lg border border-slate-800 line-clamp-3">
+                      {routeDetails}
+                    </p>
                   </div>
                 </div>
 
-                <button
-                  type="submit"
-                  className="w-full bg-blue-700 hover:bg-blue-600 active:scale-95 text-white font-bold uppercase tracking-wider py-4 rounded transition-all shadow-md text-xs flex items-center justify-center gap-2"
-                  id="est-calc-submit-btn"
-                >
-                  <span>Compute Estimate</span>
-                  <Calculator className="w-4 h-4 stroke-[2.5]" />
-                </button>
-              </form>
-            </div>
-
-            {/* Calculations Result Output Panel */}
-            <div className="lg:col-span-5 space-y-6 text-left">
-              <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 space-y-6 flex flex-col justify-between min-h-[350px]">
-                <div>
-                  <h3 className="text-sm font-bold uppercase tracking-widest text-slate-400 mb-4 pb-2 border-b border-slate-800">
-                    Est. Invoice Breakdown
-                  </h3>
-                  
-                  {calculationResult ? (
-                    selectedServiceId === 'stat-emergency' ? (
-                      <div className="space-y-4">
-                        <div className="p-4 bg-rose-950/20 border border-rose-900/50 rounded-2xl space-y-2 text-xs text-left leading-relaxed">
-                          <span className="block text-xs font-bold text-rose-400 uppercase tracking-wider mb-1">Priority Dispatch Tier</span>
-                          <p className="text-slate-300">
-                            Our STAT Emergency service operates as an immediate drop-everything priority run, bypassing standard routing. Rates are custom-calculated by dispatch to ensure direct, optimized logistics.
-                          </p>
-                          <p className="text-slate-300 font-semibold mt-2">
-                            Please contact our Flagstaff dispatch desk directly:
-                          </p>
-                          <div className="text-blue-400 font-bold font-mono space-y-0.5 mt-1">
-                            <div>Phone: 928-547-1058</div>
-                            <div>Email: Info@Omneecourier.com</div>
-                          </div>
-                        </div>
-
-                        {/* Transit Details */}
-                        <div className="bg-slate-950 border border-slate-800/80 p-4 rounded-xl space-y-2 text-xs text-left">
-                          <div className="flex justify-between">
-                            <span className="text-slate-500 font-semibold uppercase">Transit Tier:</span>
-                            <span className="text-rose-400 font-bold">Priority STAT (Immediate)</span>
-                          </div>
-                          <div className="flex justify-between">
-                            <span className="text-slate-500 font-semibold uppercase">Route Coverage:</span>
-                            <span className="text-slate-300 font-bold">Northern Arizona Region</span>
-                          </div>
-                          <div className="flex justify-between">
-                            <span className="text-slate-500 font-semibold uppercase">Availability:</span>
-                            <span className="text-blue-400 font-bold">24 Hours Around the Clock</span>
-                          </div>
-                        </div>
-                      </div>
-                    ) : (
-                      <div className="space-y-4">
-                        {/* Cost Rows */}
-                        <div className="space-y-2 text-xs font-mono">
-                          <div className="flex justify-between">
-                            <span className="text-slate-400">Base Service Surcharge:</span>
-                            <span className="text-white">${calculationResult.base.toFixed(2)}</span>
-                          </div>
-                          <div className="flex justify-between">
-                            <span className="text-slate-400">Mileage Tariff ({distance} mi):</span>
-                            <span className="text-white">${calculationResult.distanceCost.toFixed(2)}</span>
-                          </div>
-                          <div className="flex justify-between">
-                            <span className="text-slate-400">Weight Cargo Surcharge:</span>
-                            <span className="text-white">${calculationResult.weightCost.toFixed(2)}</span>
-                          </div>
-                          {urgencyMultiplier > 1 && (
-                            <div className="flex justify-between text-rose-400">
-                              <span>STAT Urgent Multiplier:</span>
-                              <span>x1.3</span>
-                            </div>
-                          )}
-                        </div>
-
-                        <div className="border-t border-slate-800 pt-4 mt-4 flex justify-between items-baseline">
-                          <span className="text-xs font-bold uppercase tracking-wider text-slate-300">Total Estimate:</span>
-                          <span className="text-3xl font-extrabold text-blue-400">${calculationResult.total.toFixed(2)}</span>
-                        </div>
-
-                        {/* Transit Details */}
-                        <div className="bg-slate-950 border border-slate-800/80 p-4 rounded-xl space-y-2 text-xs">
-                          <div className="flex justify-between">
-                            <span className="text-slate-500 font-semibold uppercase">Transit Tier:</span>
-                            <span className="text-slate-300 font-bold">{calculationResult.transitTime}</span>
-                          </div>
-                          <div className="flex justify-between">
-                            <span className="text-slate-500 font-semibold uppercase">Route Coverage:</span>
-                            <span className="text-slate-300 font-bold">Northern Arizona Region</span>
-                          </div>
-                          <div className="flex justify-between">
-                            <span className="text-slate-500 font-semibold uppercase">Handover proof:</span>
-                            <span className="text-blue-400 font-bold flex items-center gap-1">
-                              <Check className="w-3 h-3 stroke-[3]" /> Included
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                    )
-                  ) : (
-                    <div className="text-center py-10 space-y-3">
-                      <div className="w-12 h-12 rounded-full bg-slate-950 border border-slate-800 text-slate-500 flex items-center justify-center mx-auto">
-                        <Info className="w-5 h-5" />
-                      </div>
-                      <p className="text-xs text-slate-400 font-medium max-w-xs mx-auto">
-                        No parameters computed yet. Configure the sliders and click "Compute Estimate" to print your quote.
-                      </p>
-                    </div>
-                  )}
+                {/* STAT Notice */}
+                <div className="bg-blue-950/40 border border-blue-900/60 rounded-xl p-4 max-w-md mx-auto text-xs text-slate-300 text-left flex items-start gap-3">
+                  <Phone className="w-4 h-4 text-blue-400 shrink-0 mt-0.5" />
+                  <div>
+                    <span className="font-bold text-white block">Immediate STAT Assistance</span>
+                    <span>For critical time-sensitive runs needing instant vehicle deployment, call our live Flagstaff dispatch directly at </span>
+                    <a href="tel:928-547-1058" className="text-blue-400 font-bold hover:underline font-mono">928-547-1058</a>.
+                  </div>
                 </div>
 
-                {calculationResult && (
-                  <div>
-                    {selectedServiceId === 'stat-emergency' ? (
-                      <a
-                        href="tel:928-547-1058"
-                        className="w-full bg-rose-700 hover:bg-rose-600 active:scale-95 text-white font-bold uppercase tracking-wider py-3.5 rounded transition-all shadow-md text-xs flex items-center justify-center gap-1.5"
-                      >
-                        <span>Call Dispatch (928-547-1058)</span>
-                      </a>
-                    ) : bookingSuccess ? (
-                      <div className="bg-blue-950/60 border border-blue-900 text-blue-400 text-xs font-semibold p-4 rounded text-center animate-fade-in flex flex-col items-center gap-1">
-                        <CheckCircle2 className="w-5 h-5 mb-0.5 shrink-0" />
-                        <span>ESTIMATE LOGGED & DISPATCH BOOKED!</span>
-                        <span className="text-[10px] text-slate-400 font-normal">Our dispatch desk will contact you at your account email shortly.</span>
-                      </div>
-                    ) : (
-                      <button
-                        onClick={handleBookNow}
-                        className="w-full bg-blue-700 hover:bg-blue-600 active:scale-95 text-white font-bold uppercase tracking-wider py-3.5 rounded transition-all shadow-md text-xs flex items-center justify-center gap-1.5"
-                        id="est-book-btn"
-                      >
-                        <span>Lock and Book Delivery</span>
-                        <ArrowRight className="w-4 h-4 stroke-[2.5]" />
-                      </button>
-                    )}
+                <div className="pt-2">
+                  <button
+                    onClick={handleResetForm}
+                    className="bg-slate-800 hover:bg-slate-700 text-white text-xs font-bold uppercase tracking-wider px-6 py-3 rounded-xl transition-all"
+                  >
+                    Submit Another Dispatch Request
+                  </button>
+                </div>
+              </div>
+            ) : (
+              /* The 4-Field Form */
+              <form onSubmit={handleFormSubmit} className="space-y-6 text-left" id="dispatch-request-form">
+                {errorMessage && (
+                  <div className="bg-rose-950/40 border border-rose-900 text-rose-300 text-xs font-semibold p-4 rounded-xl flex items-center gap-2">
+                    <AlertCircle className="w-4 h-4 shrink-0 text-rose-400" />
+                    <span>{errorMessage}</span>
                   </div>
                 )}
-              </div>
-            </div>
+
+                {/* Field 1: Practice / Facility Name */}
+                <div>
+                  <label htmlFor="facility-name-input" className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2 flex items-center gap-1.5">
+                    <Building2 className="w-4 h-4 text-blue-400" />
+                    <span>Practice / Facility Name</span>
+                    <span className="text-rose-400">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    id="facility-name-input"
+                    value={facilityName}
+                    onChange={(e) => setFacilityName(e.target.value)}
+                    placeholder="e.g., Flagstaff Animal Hospital, High Country Veterinary Care, Coconino Health Clinic"
+                    required
+                    className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 font-medium transition-all"
+                  />
+                </div>
+
+                {/* Field 2: Contact Name, Phone & Email */}
+                <div>
+                  <label className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2 flex items-center gap-1.5">
+                    <User className="w-4 h-4 text-blue-400" />
+                    <span>Contact Name, Phone & Email</span>
+                    <span className="text-rose-400">*</span>
+                  </label>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                    <div>
+                      <input
+                        type="text"
+                        id="contact-name-input"
+                        value={contactName}
+                        onChange={(e) => setContactName(e.target.value)}
+                        placeholder="Contact Name (e.g., Dr. Sarah Jenkins)"
+                        required
+                        className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 font-medium transition-all"
+                      />
+                    </div>
+                    <div>
+                      <input
+                        type="tel"
+                        id="contact-phone-input"
+                        value={phone}
+                        onChange={(e) => setPhone(e.target.value)}
+                        placeholder="Phone (e.g., 928-555-0199)"
+                        required
+                        className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 font-medium font-mono transition-all"
+                      />
+                    </div>
+                    <div>
+                      <input
+                        type="email"
+                        id="contact-email-input"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        placeholder="Email (e.g., clinic@flagstaffvet.com)"
+                        required
+                        className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 font-medium transition-all"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Field 3: Dispatch Type (Dropdown) */}
+                <div>
+                  <label htmlFor="dispatch-type-select" className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2 flex items-center gap-1.5">
+                    <Activity className="w-4 h-4 text-blue-400" />
+                    <span>Dispatch Type</span>
+                    <span className="text-rose-400">*</span>
+                  </label>
+                  <select
+                    id="dispatch-type-select"
+                    value={dispatchType}
+                    onChange={(e) => setDispatchType(e.target.value as DispatchType)}
+                    required
+                    className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 font-semibold transition-all cursor-pointer"
+                  >
+                    <option value="Scheduled Daily Veterinary Sweep">Scheduled Daily Veterinary Sweep</option>
+                    <option value="Medical Specimen Route">Medical Specimen Route</option>
+                    <option value="STAT Emergency Run">STAT Emergency Run</option>
+                  </select>
+                  <p className="text-[11px] text-slate-400 mt-1.5">
+                    {dispatchType === 'Scheduled Daily Veterinary Sweep' && 'Afternoon/evening recurring sweeps meeting IDEXX, Antech, or reference lab flight cutoffs.'}
+                    {dispatchType === 'Medical Specimen Route' && 'HIPAA & OSHA compliant transport for clinical human specimens with locked chain-of-custody.'}
+                    {dispatchType === 'STAT Emergency Run' && 'Drop-everything 24/7 emergency response dispatch across Northern Arizona.'}
+                  </p>
+                </div>
+
+                {/* Field 4: Route & Temperature Details (Text area) */}
+                <div>
+                  <label htmlFor="route-details-input" className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2 flex items-center gap-1.5">
+                    <Thermometer className="w-4 h-4 text-blue-400" />
+                    <span>Route & Temperature Details</span>
+                    <span className="text-rose-400">*</span>
+                  </label>
+                  <textarea
+                    id="route-details-input"
+                    rows={4}
+                    value={routeDetails}
+                    onChange={(e) => setRouteDetails(e.target.value)}
+                    placeholder="Pickup address, destination lab (e.g. IDEXX / Antech drop, regional hospital), desired cut-off time, and temperature specifications (ambient, cold pack, frozen)..."
+                    required
+                    className="w-full bg-slate-950 border border-slate-800 rounded-xl p-4 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 font-normal leading-relaxed transition-all"
+                  ></textarea>
+                </div>
+
+                {/* Submit Button */}
+                <div className="pt-2">
+                  <button
+                    type="submit"
+                    id="submit-dispatch-request-btn"
+                    className="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs uppercase tracking-wider py-4 px-6 rounded-xl transition-all shadow-lg hover:shadow-blue-500/25 active:scale-95 flex items-center justify-center gap-2"
+                  >
+                    <span>Submit Dispatch Request</span>
+                    <ArrowRight className="w-4 h-4 stroke-[2.5]" />
+                  </button>
+                  <div className="flex flex-wrap items-center justify-between text-[11px] text-slate-400 mt-3 px-1">
+                    <span>Direct Flagstaff dispatch review within 15 minutes.</span>
+                    <span className="flex items-center gap-1 text-slate-300 font-medium">
+                      <Phone className="w-3 h-3 text-blue-400" />
+                      24/7 STAT Desk: 928-547-1058
+                    </span>
+                  </div>
+                </div>
+              </form>
+            )}
           </div>
         </div>
       </section>

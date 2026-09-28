@@ -36,34 +36,74 @@ export default function Navigation({ activeSection, setActiveSection, onOpenTrac
   return (
     <>
       {/* Top Banner Bar */}
-      <div className="bg-slate-900 text-slate-400 text-xs py-2 px-4 sm:px-6 md:px-8 border-b border-slate-800 flex flex-wrap justify-between items-center gap-2">
-        <div className="flex items-center gap-4">
-          <div className="flex items-center gap-1.5">
-            <Clock className="w-3.5 h-3.5 text-blue-500" />
-            <span>STAT Available 24/7 | After-Hours & Weekend Services</span>
+      <div className="bg-slate-900 text-slate-300 text-xs py-2 px-3 sm:px-6 lg:px-8 border-b border-slate-800" id="top-announcement-banner">
+        {/* Mobile View: Concise single-line bar without email clutter, guaranteed no wrapping */}
+        <div className="sm:hidden flex items-center justify-between gap-2">
+          <div className="flex items-center gap-1.5 min-w-0 text-[11px] text-slate-300">
+            <Clock className="w-3.5 h-3.5 text-rose-400 shrink-0" />
+            <span className="font-bold text-rose-400 whitespace-nowrap">STAT 24/7</span>
+            <span className="text-slate-600">•</span>
+            <span className="text-slate-300 truncate">After-Hours: 5PM–6AM</span>
           </div>
-          <div className="hidden md:flex items-center gap-1.5">
-            <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></span>
-            <span className="text-slate-300">Operations Normal | Certified Handlers</span>
-          </div>
+          <a
+            href="tel:9285471058"
+            className="shrink-0 inline-flex items-center gap-1 text-white hover:text-blue-300 font-mono font-bold text-xs bg-blue-600/25 px-2 py-0.5 rounded border border-blue-500/30 whitespace-nowrap"
+            id="top-bar-mobile-call"
+            aria-label="Call Dispatch 928-547-1058"
+          >
+            <Phone className="w-3 h-3 text-blue-400 shrink-0" />
+            <span className="whitespace-nowrap tabular-nums">928-547-1058</span>
+          </a>
         </div>
-        <div className="flex items-center gap-4">
-          <a href="tel:9285471058" className="hover:text-blue-400 transition-colors flex items-center gap-1 sm:gap-1.5 font-sans font-bold">
-            <Phone className="w-3.5 h-3.5 text-blue-500" />
-            <span>Dispatch Phone: 928-547-1058</span>
-          </a>
-          <span className="text-slate-700">|</span>
-          <a href="mailto:Info@omneecourier.com" className="hover:text-blue-400 transition-colors flex items-center gap-1 sm:gap-1.5 font-sans">
-            <Mail className="w-3.5 h-3.5 text-blue-500" />
-            <span>Email: Info@omneecourier.com</span>
-          </a>
+
+        {/* Desktop / Tablet View (sm and up) */}
+        <div className="hidden sm:flex max-w-7xl mx-auto flex-row justify-between items-center gap-2.5">
+          {/* Operational Hours Highlights */}
+          <div className="flex flex-wrap items-center gap-x-2.5 gap-y-1 text-xs">
+            <div className="inline-flex items-center gap-1.5 font-bold">
+              <Clock className="w-3.5 h-3.5 text-blue-400 shrink-0" />
+              <span className="text-blue-300 font-mono text-[10px] font-bold uppercase tracking-wider bg-blue-950/90 px-2 py-0.5 rounded border border-blue-800/80 whitespace-nowrap">
+                Operational Hours
+              </span>
+            </div>
+            <span className="text-slate-200 whitespace-nowrap">
+              <strong className="text-rose-400 font-bold">STAT 24/7</strong> (365 Days)
+            </span>
+            <span className="text-slate-600">•</span>
+            <span className="text-slate-300 whitespace-nowrap">
+              <strong className="text-blue-400 font-semibold">After-Hours:</strong> Mon–Fri 5:00 PM – 6:00 AM
+            </span>
+            <span className="text-slate-600 hidden md:inline">•</span>
+            <span className="text-slate-300 hidden md:inline whitespace-nowrap">
+              <strong className="text-indigo-300 font-semibold">Sweeps:</strong> Daily Afternoon & Evening
+            </span>
+          </div>
+
+          {/* Active Dispatch Desk Contact */}
+          <div className="flex items-center gap-3 text-xs shrink-0 justify-end">
+            <div className="flex items-center gap-1.5 whitespace-nowrap">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+              <span className="text-slate-400 font-semibold text-[11px] whitespace-nowrap">Active Dispatch Desk (24/7):</span>
+            </div>
+            <div className="flex items-center gap-2.5 whitespace-nowrap">
+              <a href="tel:9285471058" className="text-white hover:text-blue-400 transition-colors flex items-center gap-1 font-mono font-bold whitespace-nowrap">
+                <Phone className="w-3.5 h-3.5 text-blue-400 shrink-0" />
+                <span className="whitespace-nowrap tabular-nums">928-547-1058</span>
+              </a>
+              <span className="text-slate-700">|</span>
+              <a href="mailto:Info@omneecourier.com" className="text-slate-300 hover:text-blue-400 transition-colors flex items-center gap-1 font-mono text-xs whitespace-nowrap">
+                <Mail className="w-3.5 h-3.5 text-blue-400 shrink-0" />
+                <span className="whitespace-nowrap">Info@omneecourier.com</span>
+              </a>
+            </div>
+          </div>
         </div>
       </div>
 
       {/* Main Header Navigation */}
       <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-100 shadow-sm transition-all duration-300">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-20">
+          <div className="flex justify-between items-center h-16 sm:h-20">
             {/* Logo */}
             <button 
               onClick={() => handleNavClick('home')} 
@@ -205,8 +245,8 @@ export default function Navigation({ activeSection, setActiveSection, onOpenTrac
                 </p>
                 <div className="space-y-2">
                   <a href="tel:9285471058" className="flex items-center gap-2 text-sm font-bold hover:text-blue-300 transition-colors">
-                    <Phone className="w-4 h-4 text-blue-500" />
-                    <span>Dispatch Phone: 928-547-1058</span>
+                    <Phone className="w-4 h-4 text-blue-500 shrink-0" />
+                    <span>Dispatch Phone: <span className="whitespace-nowrap tabular-nums">928-547-1058</span></span>
                   </a>
                   <a href="mailto:Info@omneecourier.com" className="flex items-center gap-2 text-xs font-semibold text-slate-300 hover:text-white transition-colors">
                     <Mail className="w-4 h-4 text-blue-500" />
@@ -233,9 +273,9 @@ export function Footer({ setActiveSection }: { setActiveSection: (section: strin
   return (
     <footer className="bg-slate-950 text-slate-400 mt-auto border-t border-slate-900">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 sm:gap-10">
           {/* Brand Info */}
-          <div className="space-y-4">
+          <div className="space-y-4 lg:col-span-3">
             <button 
               onClick={() => handleFooterLinkClick('home')}
               className="flex items-center text-left group focus:outline-none"
@@ -246,22 +286,27 @@ export function Footer({ setActiveSection }: { setActiveSection: (section: strin
               Driven by Life. Moved by Care
             </p>
             <p className="text-sm leading-relaxed text-slate-400">
-              Reliable, compliant medical courier services in Flagstaff, tailored for healthcare providers, pharmacies, laboratories, and dental logistics.
+              Reliable, compliant diagnostic and veterinary specimen logistics in Flagstaff, tailored for healthcare providers, veterinary practices, laboratories, and local pharmacies.
             </p>
             <div className="pt-2">
               <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-blue-950 text-blue-400 border border-blue-900">
-                <span className="w-2 h-2 rounded-full bg-blue-400 animate-pulse"></span>
+                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
                 Flagstaff Dispatch Active
               </span>
             </div>
           </div>
 
           {/* Quick Links */}
-          <div>
+          <div className="lg:col-span-2">
             <h3 className="text-sm font-bold uppercase tracking-wider text-slate-200 mb-5">
               Service Areas
             </h3>
             <ul className="space-y-3 text-sm">
+              <li>
+                <button onClick={() => handleFooterLinkClick('services')} className="hover:text-blue-400 transition-colors">
+                  Veterinary Diagnostic Routes
+                </button>
+              </li>
               <li>
                 <button onClick={() => handleFooterLinkClick('services')} className="hover:text-blue-400 transition-colors">
                   Medical Specimen Transport
@@ -269,24 +314,19 @@ export function Footer({ setActiveSection }: { setActiveSection: (section: strin
               </li>
               <li>
                 <button onClick={() => handleFooterLinkClick('services')} className="hover:text-blue-400 transition-colors">
-                  Pharmaceutical Delivery
+                  STAT Emergency Dispatches
                 </button>
               </li>
               <li>
                 <button onClick={() => handleFooterLinkClick('services')} className="hover:text-blue-400 transition-colors">
-                  Medical Records Courier
-                </button>
-              </li>
-              <li>
-                <button onClick={() => handleFooterLinkClick('services')} className="hover:text-blue-400 transition-colors">
-                  Scheduled and Backup Routes
+                  Scheduled Daily Sweeps
                 </button>
               </li>
             </ul>
           </div>
 
           {/* Company links */}
-          <div>
+          <div className="lg:col-span-2">
             <h3 className="text-sm font-bold uppercase tracking-wider text-slate-200 mb-5">
               Company
             </h3>
@@ -314,29 +354,83 @@ export function Footer({ setActiveSection }: { setActiveSection: (section: strin
             </ul>
           </div>
 
-          {/* Contacts Info */}
-          <div className="space-y-4">
+          {/* Exact Operational Hours & Contact Card */}
+          <div className="space-y-4 lg:col-span-5" id="footer-operational-hours-card">
             <h3 className="text-sm font-bold uppercase tracking-wider text-slate-200">
-              Contact & Dispatch
+              Operational Hours & Dispatch
             </h3>
-            <div className="bg-slate-900/40 border border-slate-900 rounded-xl p-4 space-y-3">
-              <div className="text-[10px] text-blue-400 font-bold uppercase tracking-wider">
-                Flagstaff HQ Dispatch
+            <div className="bg-slate-900/60 border border-slate-800 rounded-2xl p-5 space-y-4 text-left">
+              {/* Active Dispatch Desk */}
+              <div className="space-y-1.5 pb-3 border-b border-slate-800/90">
+                <div className="flex items-center gap-2">
+                  <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                  <span className="text-xs font-extrabold uppercase tracking-wider text-emerald-400">
+                    Active Dispatch Desk: 24/7 On-Call
+                  </span>
+                </div>
+                <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 pt-1 text-xs">
+                  <a href="tel:9285471058" className="text-white hover:text-blue-400 transition-colors flex items-center gap-1.5 font-mono font-bold">
+                    <Phone className="w-3.5 h-3.5 text-blue-400 shrink-0" />
+                    <span>928-547-1058</span>
+                  </a>
+                  <span className="text-slate-700 hidden sm:inline">|</span>
+                  <a href="mailto:Info@omneecourier.com" className="text-slate-300 hover:text-blue-400 transition-colors flex items-center gap-1.5 font-mono text-xs">
+                    <Mail className="w-3.5 h-3.5 text-blue-400 shrink-0" />
+                    <span>Info@omneecourier.com</span>
+                  </a>
+                </div>
               </div>
-              <ul className="space-y-2.5 text-sm">
-                <li>
-                  <a href="tel:9285471058" className="flex items-center gap-2 text-slate-300 hover:text-blue-400 transition-colors font-semibold">
-                    <Phone className="w-4 h-4 text-blue-500" />
-                    <span>Dispatch Phone: 928-547-1058</span>
-                  </a>
-                </li>
-                <li>
-                  <a href="mailto:Info@omneecourier.com" className="flex items-center gap-2 text-slate-300 hover:text-blue-400 transition-colors font-semibold">
-                    <Mail className="w-4 h-4 text-blue-500" />
-                    <span>Email: Info@omneecourier.com</span>
-                  </a>
-                </li>
-              </ul>
+
+              {/* Exact Operational Coverage Tiers */}
+              <div className="space-y-3.5 text-xs">
+                {/* 1. STAT Emergency Dispatches */}
+                <div className="space-y-1">
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="text-rose-400 font-bold flex items-center gap-1.5">
+                      <span className="w-1.5 h-1.5 rounded-full bg-rose-400"></span>
+                      1. STAT Emergency Dispatches
+                    </span>
+                    <span className="text-[10px] font-mono font-bold text-white bg-rose-950/80 border border-rose-800/80 px-2 py-0.5 rounded shrink-0">
+                      24/7 Availability
+                    </span>
+                  </div>
+                  <p className="text-slate-400 text-[11px] leading-relaxed pl-3 border-l border-rose-900/40">
+                    Immediate drop-everything priority service, 365 days a year, including weekends and holidays.
+                  </p>
+                </div>
+
+                {/* 2. Dedicated After-Hours Route Coverage */}
+                <div className="space-y-1">
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="text-blue-400 font-bold flex items-center gap-1.5">
+                      <span className="w-1.5 h-1.5 rounded-full bg-blue-400"></span>
+                      2. Dedicated After-Hours Route Coverage
+                    </span>
+                    <span className="text-[10px] font-mono font-bold text-slate-200 bg-slate-800 px-2 py-0.5 rounded shrink-0">
+                      Mon–Fri: 5PM–6AM
+                    </span>
+                  </div>
+                  <p className="text-slate-400 text-[11px] leading-relaxed pl-3 border-l border-blue-900/40">
+                    Monday through Friday from 5:00 PM to 6:00 AM (Bridging critical overnight gaps for local clinics and reference labs).
+                  </p>
+                </div>
+
+                {/* 3. Scheduled Route Sweeps */}
+                <div className="space-y-1">
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="text-indigo-400 font-bold flex items-center gap-1.5">
+                      <span className="w-1.5 h-1.5 rounded-full bg-indigo-400"></span>
+                      3. Scheduled Route Sweeps
+                    </span>
+                    <span className="text-[10px] font-mono font-bold text-slate-200 bg-slate-800 px-2 py-0.5 rounded shrink-0">
+                      Daily Sweeps
+                    </span>
+                  </div>
+                  <p className="text-slate-400 text-[11px] leading-relaxed pl-3 border-l border-indigo-900/40">
+                    Recurring daily afternoon and evening sweeps timed around animal hospital, clinic, and diagnostic lab cutoffs.
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
         </div>

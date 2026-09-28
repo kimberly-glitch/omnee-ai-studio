@@ -18,7 +18,7 @@ export default function OmneeLogo({ theme = 'light', className = '' }: OmneeLogo
         viewBox="0 0 500 140"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
-        className="h-12 sm:h-14 w-auto drop-shadow-sm"
+        className="h-10 sm:h-12 md:h-14 w-auto drop-shadow-sm"
       >
         {/* Background container just to ensure high contrast inside the SVG path if needed */}
         {/* EKG / Pulse Line & Arrow */}

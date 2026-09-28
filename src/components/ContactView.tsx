@@ -219,9 +219,11 @@ export default function ContactView() {
                       className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/10 focus:border-blue-600 text-slate-800 font-semibold"
                     >
                       <option value="General Logistics Inquiry">General Logistics Inquiry</option>
-                      <option value="Corporate Account Setup">Corporate Account Setup</option>
+                      <option value="Veterinary Diagnostic Route Setup">Veterinary Diagnostic Route Setup</option>
+                      <option value="STAT Emergency Dispatch">STAT Emergency Dispatch</option>
+                      <option value="Dedicated After-Hours Route Coverage">Dedicated After-Hours Route Coverage</option>
                       <option value="Medical Courier Specifications">Medical Courier Specifications</option>
-                      <option value="Route API Integration">Route API Integration</option>
+                      <option value="Corporate Account Setup">Corporate Account Setup</option>
                       <option value="Billing & Invoicing Query">Billing & Invoicing Query</option>
                     </select>
                   </div>
@@ -304,7 +306,7 @@ export default function ContactView() {
                   </div>
                   <div>
                     <span className="block text-[10px] font-bold uppercase tracking-wider text-slate-500">Phone</span>
-                    <a href="tel:9285471058" className="block font-semibold text-slate-200 hover:text-blue-400 transition-colors mt-1 font-mono">
+                    <a href="tel:9285471058" className="block font-semibold text-slate-200 hover:text-blue-400 transition-colors mt-1 font-mono whitespace-nowrap tabular-nums">
                       928-547-1058
                     </a>
                   </div>
@@ -323,33 +325,55 @@ export default function ContactView() {
                   </div>
                 </div>
 
-                {/* Dispatch Desk Availability */}
-                <div className="flex gap-3.5">
+                {/* Dispatch Desk & Exact Operational Hours */}
+                <div className="flex gap-3.5 pt-2 border-t border-slate-800">
                   <div className="p-2.5 bg-slate-800 text-blue-400 rounded-xl shrink-0 h-fit border border-slate-700">
                     <Clock className="w-5 h-5" />
                   </div>
-                  <div>
-                    <span className="block text-[10px] font-bold uppercase tracking-wider text-slate-500">Service Hours</span>
-                    <div className="space-y-1.5 mt-1">
-                      <div className="flex justify-between items-center text-sm font-semibold text-slate-200">
-                        <span className="text-slate-400 font-normal">Mon-Fri:</span>
-                        <span>5:00 PM - 6:00 AM</span>
-                      </div>
-                      <div className="flex justify-between items-center text-sm font-semibold text-blue-400">
-                        <span className="text-slate-400 font-normal">Weekends:</span>
-                        <span>24 Hours</span>
-                      </div>
-                      <div className="flex justify-between items-center text-sm font-semibold text-blue-400">
-                        <span className="text-slate-400 font-normal">Holidays:</span>
-                        <span>24 Hours</span>
-                      </div>
+                  <div className="space-y-3 w-full">
+                    <div>
+                      <span className="block text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                        Exact Operational Hours
+                      </span>
+                      <span className="text-xs font-bold text-emerald-400 flex items-center gap-1.5 mt-0.5">
+                        <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                        Active Dispatch Desk: 24/7 On-Call
+                      </span>
                     </div>
-                    <p className="text-[10px] text-slate-500 mt-2 leading-relaxed">
-                      Emergency STAT dispatch availability considered at all times.
-                    </p>
-                    <div className="mt-3 pt-3 border-t border-slate-800">
-                      <span className="block text-[9px] font-bold uppercase tracking-widest text-slate-600 mb-1">Our Objective</span>
-                      <span className="block text-[11px] font-bold text-slate-400">24 Hours a Day • 365 Days a Year</span>
+
+                    <div className="space-y-2.5 text-xs">
+                      {/* 1. STAT Emergency */}
+                      <div className="bg-slate-950/60 border border-slate-800 rounded-xl p-2.5">
+                        <div className="flex justify-between items-center text-xs font-bold">
+                          <span className="text-rose-400">1. STAT Emergency:</span>
+                          <span className="text-[10px] font-mono bg-rose-950/80 text-white px-1.5 py-0.5 rounded border border-rose-800/80">24/7 (365 Days)</span>
+                        </div>
+                        <p className="text-[11px] text-slate-400 mt-1 leading-snug">
+                          Immediate drop-everything priority service, 365 days a year, including weekends and holidays.
+                        </p>
+                      </div>
+
+                      {/* 2. Dedicated After-Hours */}
+                      <div className="bg-slate-950/60 border border-slate-800 rounded-xl p-2.5">
+                        <div className="flex justify-between items-center text-xs font-bold">
+                          <span className="text-blue-400">2. After-Hours Coverage:</span>
+                          <span className="text-[10px] font-mono text-slate-200">Mon–Fri: 5PM–6AM</span>
+                        </div>
+                        <p className="text-[11px] text-slate-400 mt-1 leading-snug">
+                          Monday through Friday from 5:00 PM to 6:00 AM (Bridging critical overnight gaps for local clinics and reference labs).
+                        </p>
+                      </div>
+
+                      {/* 3. Scheduled Sweeps */}
+                      <div className="bg-slate-950/60 border border-slate-800 rounded-xl p-2.5">
+                        <div className="flex justify-between items-center text-xs font-bold">
+                          <span className="text-indigo-400">3. Scheduled Route Sweeps:</span>
+                          <span className="text-[10px] font-mono text-slate-200">Daily Sweeps</span>
+                        </div>
+                        <p className="text-[11px] text-slate-400 mt-1 leading-snug">
+                          Recurring daily afternoon and evening sweeps timed around animal hospital, clinic, and diagnostic lab cutoffs.
+                        </p>
+                      </div>
                     </div>
                   </div>
                 </div>
