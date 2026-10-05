@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 
 export const ContactView: React.FC = () => {
-  // Replace with your Formspree Form ID from https://formspree.io
-  const FORMSPREE_FORM_ID = 'YOUR_FORM_ID';
+ 
 
   const [formData, setFormData] = useState({
     name: '',
