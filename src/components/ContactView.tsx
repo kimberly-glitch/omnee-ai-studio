@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 export const ContactView: React.FC = () => {
- 
+  const FORMSPREE_FORM_ID = 'mjygvzze';
 
   const [formData, setFormData] = useState({
     name: '',
@@ -27,7 +27,7 @@ export const ContactView: React.FC = () => {
     setErrorMessage('');
 
     try {
-      const response = await fetch(`https://formspree.io/f/mjygvzze`, {
+      const response = await fetch(`https://formspree.io/f/${FORMSPREE_FORM_ID}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -106,7 +106,6 @@ export const ContactView: React.FC = () => {
                 placeholder="Jane Doe"
               />
             </div>
-
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Email Address *</label>
               <input
@@ -134,7 +133,6 @@ export const ContactView: React.FC = () => {
                 placeholder="928-555-0199"
               />
             </div>
-
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Facility / Practice Name</label>
               <input
