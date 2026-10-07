@@ -438,7 +438,7 @@ export function Footer({ setActiveSection }: { setActiveSection: (section: strin
         {/* Lower row */}
         <div className="border-t border-slate-900 mt-12 pt-8 flex flex-col sm:flex-row justify-between items-center gap-4 text-xs">
           <div>
-            &copy; {currentYear} Omnee Courier Solutions LLC. All rights reserved.
+           &copy; {new Date().getFullYear()} Omnee Courier Solutions LLC. All rights reserved.
           </div>
           <div className="flex gap-6 text-slate-500">
             <a href="#privacy" className="hover:text-slate-300 transition-colors">Privacy Policy</a>
