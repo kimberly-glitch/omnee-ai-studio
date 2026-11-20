@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { SERVICES } from '../data';
+import { DispatchType } from '../types';
 import { 
   Zap, 
   Calendar, 
@@ -15,37 +16,64 @@ import {
   User, 
   Mail, 
   Check, 
-  AlertCircle 
+  AlertCircle,
+  Lock
 } from 'lucide-react';
 
 interface ServicesViewProps {
   onNavigate: (section: string) => void;
+  pendingQuoteRequest?: {
+    type: DispatchType;
+    id: number;
+  } | null;
 }
 
-type DispatchType = 'Scheduled Daily Veterinary Sweep' | 'Medical Specimen Route' | 'STAT Emergency Run';
-
-export default function ServicesView({ onNavigate }: ServicesViewProps) {
+export default function ServicesView({ onNavigate, pendingQuoteRequest }: ServicesViewProps) {
   // Quote Request Form States
   const [facilityName, setFacilityName] = useState('');
   const [contactName, setContactName] = useState('');
   const [phone, setPhone] = useState('');
   const [email, setEmail] = useState('');
-  const [dispatchType, setDispatchType] = useState<DispatchType>('Scheduled Daily Veterinary Sweep');
+  const [dispatchType, setDispatchType] = useState<DispatchType>(
+    pendingQuoteRequest?.type ?? 'Scheduled Daily Veterinary Sweep'
+  );
   const [routeDetails, setRouteDetails] = useState('');
   
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [confirmationCode, setConfirmationCode] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const lastHandledRequestIdRef = useRef<number | null>(null);
 
   const scrollToQuoteForm = (type?: DispatchType) => {
     if (type) {
       setDispatchType(type);
+      setFormSubmitted(false);
     }
     const targetElement = document.getElementById('quote-request-section');
     if (targetElement) {
-      targetElement.scrollIntoView({ behavior: 'smooth' });
+      targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   };
+
+  useEffect(() => {
+    if (
+      pendingQuoteRequest &&
+      lastHandledRequestIdRef.current !== pendingQuoteRequest.id
+    ) {
+      setDispatchType(pendingQuoteRequest.type);
+      setFormSubmitted(false);
+
+      const timer = window.setTimeout(() => {
+        lastHandledRequestIdRef.current = pendingQuoteRequest.id;
+        const targetElement = document.getElementById('quote-request-section');
+        if (targetElement) {
+          targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }, 60);
+
+      return () => window.clearTimeout(timer);
+    }
+  }, [pendingQuoteRequest]);
 
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -74,13 +102,15 @@ export default function ServicesView({ onNavigate }: ServicesViewProps) {
   const renderServiceIcon = (id: string) => {
     switch (id) {
       case 'veterinary-routes':
-        return <Activity className="w-6 h-6 text-blue-500" />;
+        return <Activity className="w-6 h-6 text-blue-400" />;
       case 'medical-specimen':
-        return <ShieldAlert className="w-6 h-6 text-indigo-500" />;
+        return <ShieldAlert className="w-6 h-6 text-indigo-400" />;
       case 'stat-emergency':
-        return <Zap className="w-6 h-6 text-rose-500" />;
+        return <Zap className="w-6 h-6 text-rose-400" />;
+      case 'legal-custody':
+        return <Lock className="w-6 h-6 text-emerald-400" />;
       default:
-        return <Calendar className="w-6 h-6 text-blue-500" />;
+        return <Calendar className="w-6 h-6 text-blue-400" />;
     }
   };
 
@@ -92,7 +122,7 @@ export default function ServicesView({ onNavigate }: ServicesViewProps) {
         <div className="max-w-4xl mx-auto relative z-10 space-y-4">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-blue-500/10 text-blue-400 border border-blue-500/20">
             <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-            <span>Flagstaff Diagnostic & Veterinary Specimen Logistics</span>
+            <span>Flagstaff Medical &amp; Category B Diagnostic Specimen Logistics</span>
           </div>
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-white leading-tight">
             Do You Have Transport Problems? Omnee Has Solutions.
@@ -103,159 +133,79 @@ export default function ServicesView({ onNavigate }: ServicesViewProps) {
         </div>
       </section>
 
-      {/* Exact Operational Hours & Route Coverage Matrix */}
+      {/* Operational Hours & Dispatch Banner */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" id="operational-hours-section">
         <div className="bg-gradient-to-br from-slate-900 via-slate-900 to-slate-950 text-white rounded-3xl p-6 sm:p-8 md:p-10 border border-slate-800 shadow-xl relative overflow-hidden text-left">
           <div className="absolute top-0 right-0 w-80 h-80 bg-blue-600/10 rounded-full blur-3xl pointer-events-none"></div>
           
           <div className="relative z-10 space-y-8">
-            {/* Section Header with Active Dispatch Desk */}
-            <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 border-b border-slate-800 pb-6">
-              <div className="space-y-2">
-                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-blue-500/10 text-blue-400 border border-blue-500/20 font-mono">
-                  <Clock className="w-3.5 h-3.5 text-blue-400" />
-                  <span>Flagstaff Operating Windows & Courier Availability</span>
+            {/* Section Header with Direct Dispatch Contact */}
+            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 border-b border-slate-800 pb-6">
+              <div className="space-y-3">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-mono">
+                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shrink-0"></span>
+                  <span>Operational Hours • 24/7 STAT &amp; On-Demand</span>
                 </div>
-                <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white">
-                  Exact Operational Hours & Route Coverage
+                <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white leading-snug">
+                  Open 24/7 for STAT &amp; On-Demand — Contact Us for Scheduled Sweeps &amp; Routine Pickups
                 </h2>
                 <p className="text-slate-400 text-xs sm:text-sm max-w-2xl leading-relaxed">
-                  Tailored routing windows designed to seamlessly connect Flagstaff veterinary hospitals, diagnostic clinics, and regional reference labs with zero logistical gaps.
+                  Dependable diagnostic, veterinary, and medical specimen logistics across Flagstaff and Northern Arizona. Reach our dispatch desk anytime to coordinate your route or immediate pickup.
                 </p>
               </div>
 
-              {/* Active Dispatch Desk Quick Card */}
-              <div className="bg-slate-950 border border-slate-800 rounded-2xl p-4 shrink-0 space-y-2 lg:text-right shadow-inner">
+              {/* Direct Dispatch Contact Card */}
+              <div className="bg-slate-950 border border-slate-800 rounded-2xl p-4 sm:p-5 shrink-0 space-y-2.5 lg:text-right shadow-inner">
                 <div className="flex items-center gap-2 lg:justify-end">
-                  <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                  <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse shrink-0"></span>
                   <span className="text-xs font-extrabold uppercase tracking-wider text-emerald-400">
-                    Active Dispatch Desk
+                    24/7 Dispatch Desk
                   </span>
                 </div>
-                <div className="text-xs text-slate-300 font-medium">24/7 On-Call Live Dispatch Reachable At:</div>
-                <div className="pt-1 flex flex-wrap gap-3 lg:justify-end text-xs font-mono font-bold">
-                  <a href="tel:9285471058" className="text-white hover:text-blue-400 transition-colors flex items-center gap-1.5 bg-slate-900 px-2.5 py-1 rounded-lg border border-slate-800 whitespace-nowrap">
+                <div className="text-xs text-slate-300 font-medium">Reach Dispatch Directly:</div>
+                <div className="pt-1 flex flex-wrap gap-2.5 lg:justify-end text-xs font-mono font-bold">
+                  <a href="tel:9285471058" className="text-white hover:text-blue-400 transition-colors flex items-center gap-1.5 bg-slate-900 px-3 py-1.5 rounded-lg border border-slate-800 whitespace-nowrap">
                     <Phone className="w-3.5 h-3.5 text-blue-400 shrink-0" />
                     <span className="whitespace-nowrap tabular-nums">928-547-1058</span>
                   </a>
-                  <a href="mailto:Info@omneecourier.com" className="text-slate-300 hover:text-blue-400 transition-colors flex items-center gap-1.5 bg-slate-900 px-2.5 py-1 rounded-lg border border-slate-800 font-normal">
-                    <Mail className="w-3.5 h-3.5 text-blue-400" />
-                    <span>Info@omneecourier.com</span>
+                  <a href="mailto:Info@omneecourier.com" className="text-slate-300 hover:text-blue-400 transition-colors flex items-center gap-1.5 bg-slate-900 px-3 py-1.5 rounded-lg border border-slate-800 font-normal whitespace-nowrap">
+                    <Mail className="w-3.5 h-3.5 text-blue-400 shrink-0" />
+                    <span className="whitespace-nowrap">Info@omneecourier.com</span>
                   </a>
                 </div>
               </div>
             </div>
 
-            {/* 4-Item Operational Hours Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
-              {/* 1. STAT Emergency Dispatches */}
-              <div className="bg-slate-950/75 border border-slate-800/90 rounded-2xl p-5 flex flex-col justify-between space-y-4 hover:border-slate-700 transition-colors shadow-sm">
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between">
-                    <div className="w-9 h-9 rounded-xl bg-rose-500/10 text-rose-400 flex items-center justify-center font-bold">
-                      <Zap className="w-5 h-5" />
-                    </div>
-                    <span className="text-[10px] font-mono font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-rose-500/15 text-rose-300 border border-rose-500/30">
-                      Tier 1 • Urgent
-                    </span>
-                  </div>
-                  <div>
-                    <h3 className="text-sm font-bold text-white">STAT Emergency Dispatches</h3>
-                    <div className="text-xs font-extrabold text-rose-400 mt-1 font-mono">
-                      24/7 Availability
-                    </div>
-                  </div>
-                  <p className="text-xs text-slate-400 leading-relaxed">
-                    Immediate drop-everything priority service, 365 days a year, including weekends and holidays.
-                  </p>
+            {/* 3-Column Clean Service Availability Highlights */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+              <div className="bg-slate-950/75 border border-slate-800/90 rounded-2xl p-5 space-y-2.5 hover:border-slate-700 transition-colors shadow-sm">
+                <div className="w-9 h-9 rounded-xl bg-indigo-500/10 text-indigo-400 flex items-center justify-center font-bold">
+                  <Calendar className="w-5 h-5" />
                 </div>
-                <div className="pt-3 border-t border-slate-900 text-[11px] text-slate-400 font-semibold flex items-center gap-1.5">
-                  <span className="w-1.5 h-1.5 rounded-full bg-rose-400"></span>
-                  <span>Zero delays • 365 days a year</span>
-                </div>
+                <h3 className="text-sm font-bold text-white">Scheduled Sweeps</h3>
+                <p className="text-xs text-slate-400 leading-relaxed">
+                  Recurring route sweeps coordinated around veterinary hospitals, medical clinics, and reference lab cutoffs.
+                </p>
               </div>
 
-              {/* 2. Dedicated After-Hours Route Coverage */}
-              <div className="bg-slate-950/75 border border-slate-800/90 rounded-2xl p-5 flex flex-col justify-between space-y-4 hover:border-slate-700 transition-colors shadow-sm">
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between">
-                    <div className="w-9 h-9 rounded-xl bg-blue-500/10 text-blue-400 flex items-center justify-center font-bold">
-                      <Clock className="w-5 h-5" />
-                    </div>
-                    <span className="text-[10px] font-mono font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-blue-500/15 text-blue-300 border border-blue-500/30">
-                      Tier 2 • Overnight
-                    </span>
-                  </div>
-                  <div>
-                    <h3 className="text-sm font-bold text-white">Dedicated After-Hours Route Coverage</h3>
-                    <div className="text-xs font-extrabold text-blue-400 mt-1 font-mono">
-                      Mon–Fri: 5:00 PM – 6:00 AM
-                    </div>
-                  </div>
-                  <p className="text-xs text-slate-400 leading-relaxed">
-                    Monday through Friday from 5:00 PM to 6:00 AM (Bridging critical overnight gaps for local clinics and reference labs).
-                  </p>
+              <div className="bg-slate-950/75 border border-slate-800/90 rounded-2xl p-5 space-y-2.5 hover:border-slate-700 transition-colors shadow-sm">
+                <div className="w-9 h-9 rounded-xl bg-blue-500/10 text-blue-400 flex items-center justify-center font-bold">
+                  <Clock className="w-5 h-5" />
                 </div>
-                <div className="pt-3 border-t border-slate-900 text-[11px] text-slate-400 font-semibold flex items-center gap-1.5">
-                  <span className="w-1.5 h-1.5 rounded-full bg-blue-400"></span>
-                  <span>Overnight specimen stabilization</span>
-                </div>
+                <h3 className="text-sm font-bold text-white">Routine Pickups</h3>
+                <p className="text-xs text-slate-400 leading-relaxed">
+                  Dependable, temperature-monitored local and regional specimen transport built around your facility&apos;s workflow.
+                </p>
               </div>
 
-              {/* 3. Scheduled Route Sweeps */}
-              <div className="bg-slate-950/75 border border-slate-800/90 rounded-2xl p-5 flex flex-col justify-between space-y-4 hover:border-slate-700 transition-colors shadow-sm">
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between">
-                    <div className="w-9 h-9 rounded-xl bg-indigo-500/10 text-indigo-400 flex items-center justify-center font-bold">
-                      <Calendar className="w-5 h-5" />
-                    </div>
-                    <span className="text-[10px] font-mono font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-indigo-500/15 text-indigo-300 border border-indigo-500/30">
-                      Tier 3 • Daily Sweeps
-                    </span>
-                  </div>
-                  <div>
-                    <h3 className="text-sm font-bold text-white">Scheduled Route Sweeps</h3>
-                    <div className="text-xs font-extrabold text-indigo-400 mt-1 font-mono">
-                      Afternoon & Evening Sweeps
-                    </div>
-                  </div>
-                  <p className="text-xs text-slate-400 leading-relaxed">
-                    Recurring daily afternoon and evening sweeps timed around animal hospital, clinic, and diagnostic lab cutoffs.
-                  </p>
+              <div className="bg-slate-950/75 border border-slate-800/90 rounded-2xl p-5 space-y-2.5 hover:border-slate-700 transition-colors shadow-sm">
+                <div className="w-9 h-9 rounded-xl bg-rose-500/10 text-rose-400 flex items-center justify-center font-bold">
+                  <Zap className="w-5 h-5" />
                 </div>
-                <div className="pt-3 border-t border-slate-900 text-[11px] text-slate-400 font-semibold flex items-center gap-1.5">
-                  <span className="w-1.5 h-1.5 rounded-full bg-indigo-400"></span>
-                  <span>Synced with lab flight cutoffs</span>
-                </div>
-              </div>
-
-              {/* 4. Active Dispatch Desk */}
-              <div className="bg-slate-950/75 border border-slate-800/90 rounded-2xl p-5 flex flex-col justify-between space-y-4 hover:border-slate-700 transition-colors shadow-sm">
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between">
-                    <div className="w-9 h-9 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center font-bold">
-                      <Phone className="w-5 h-5" />
-                    </div>
-                    <span className="text-[10px] font-mono font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">
-                      Tier 4 • 24/7 Desk
-                    </span>
-                  </div>
-                  <div>
-                    <h3 className="text-sm font-bold text-white">Active Dispatch Desk</h3>
-                    <div className="text-xs font-extrabold text-emerald-400 mt-1 font-mono">
-                      24/7 On-Call Dispatch
-                    </div>
-                  </div>
-                  <p className="text-xs text-slate-400 leading-relaxed">
-                    Active 24/7 on-call dispatch desk reachable at 928-547-1058 or Info@omneecourier.com.
-                  </p>
-                </div>
-                <div className="pt-3 border-t border-slate-900 text-xs font-bold font-mono">
-                  <a href="tel:9285471058" className="text-blue-400 hover:text-blue-300 flex items-center gap-1.5 transition-colors whitespace-nowrap">
-                    <Phone className="w-3.5 h-3.5 shrink-0" />
-                    <span className="whitespace-nowrap tabular-nums">Call: 928-547-1058</span>
-                  </a>
-                </div>
+                <h3 className="text-sm font-bold text-white">STAT Dispatches</h3>
+                <p className="text-xs text-slate-400 leading-relaxed">
+                  Immediate, drop-everything priority courier response available 24/7 for urgent diagnostic and clinical logistics.
+                </p>
               </div>
             </div>
           </div>
@@ -274,89 +224,61 @@ export default function ServicesView({ onNavigate }: ServicesViewProps) {
           </p>
         </div>
 
-        {/* 3-Card Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-stretch">
+        {/* 4-Card Responsive Grid (2x2 on desktop/tablet, 1-column on mobile) */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch">
           {SERVICES.map((svc) => {
-            const isPrimary = svc.id === 'veterinary-routes';
             const targetDispatchType: DispatchType = 
               svc.id === 'veterinary-routes' 
                 ? 'Scheduled Daily Veterinary Sweep' 
                 : svc.id === 'medical-specimen' 
                   ? 'Medical Specimen Route' 
-                  : 'STAT Emergency Run';
+                  : svc.id === 'legal-custody'
+                    ? 'Confidential Legal & Chain-of-Custody'
+                    : 'STAT Emergency Run';
 
             return (
               <div
                 key={svc.id}
                 id={`service-card-${svc.id}`}
-                className={`rounded-3xl p-7 sm:p-8 flex flex-col justify-between text-left transition-all duration-200 relative ${
-                  isPrimary
-                    ? 'bg-gradient-to-b from-slate-900 to-slate-950 text-white border-2 border-blue-500 shadow-xl lg:-translate-y-2'
-                    : 'bg-white text-slate-900 border border-slate-200/80 shadow-sm hover:shadow-md'
-                }`}
+                className="rounded-3xl p-7 sm:p-8 flex flex-col justify-between text-left transition-all duration-200 relative bg-gradient-to-b from-slate-900 to-slate-950 text-white border-2 border-blue-500 shadow-xl hover:shadow-2xl hover:border-blue-400"
               >
-                {/* Primary Card Ribbon */}
-                {isPrimary && (
-                  <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-blue-600 text-white text-[10px] font-extrabold uppercase tracking-widest px-4 py-1 rounded-full shadow-md">
-                    Featured Primary Route
-                  </div>
-                )}
-
                 <div className="space-y-6">
                   {/* Icon & Service Heading */}
                   <div className="flex items-start justify-between gap-4">
-                    <div className={`w-12 h-12 rounded-2xl flex items-center justify-center font-bold ${
-                      isPrimary ? 'bg-blue-950/80 border border-blue-800' : 'bg-slate-50 border border-slate-100'
-                    }`}>
+                    <div className="w-12 h-12 rounded-2xl flex items-center justify-center font-bold bg-blue-950/80 border border-blue-800 shrink-0">
                       {renderServiceIcon(svc.id)}
                     </div>
-                    <span className={`text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full ${
-                      isPrimary 
-                        ? 'bg-blue-500/10 text-blue-400 border border-blue-500/20 font-mono' 
-                        : 'bg-slate-100 text-slate-600 font-semibold'
-                    }`}>
+                    <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20 font-mono text-right">
                       {svc.deliveryTime}
                     </span>
                   </div>
 
                   <div>
-                    <h3 className={`text-xl sm:text-2xl font-extrabold tracking-tight ${
-                      isPrimary ? 'text-white' : 'text-slate-900'
-                    }`}>
+                    <h3 className="text-xl sm:text-2xl font-extrabold tracking-tight text-white">
                       {svc.title}
                     </h3>
                     {svc.subtitle && (
-                      <p className={`text-xs font-bold mt-1 ${
-                        isPrimary ? 'text-blue-400' : 'text-blue-700'
-                      }`}>
+                      <p className="text-xs font-bold mt-1 text-blue-400">
                         {svc.subtitle}
                       </p>
                     )}
                   </div>
 
                   {/* Description */}
-                  <p className={`text-xs sm:text-sm leading-relaxed ${
-                    isPrimary ? 'text-slate-300' : 'text-slate-600'
-                  }`}>
+                  <p className="text-xs sm:text-sm leading-relaxed text-slate-300">
                     {svc.shortDesc}
                   </p>
 
                   {/* Core Features List */}
-                  <div className={`p-4 rounded-2xl border space-y-2.5 ${
-                    isPrimary ? 'bg-slate-900/60 border-slate-800' : 'bg-slate-50 border-slate-100'
-                  }`}>
-                    <span className={`text-[10px] font-bold uppercase tracking-wider block ${
-                      isPrimary ? 'text-slate-400' : 'text-slate-500'
-                    }`}>
+                  <div className="p-4 rounded-2xl border space-y-2.5 bg-slate-900/60 border-slate-800">
+                    <span className="text-[10px] font-bold uppercase tracking-wider block text-slate-400">
                       Key Route Specifications
                     </span>
                     <ul className="space-y-2">
                       {svc.features.map((feature, idx) => (
                         <li key={idx} className="flex items-start gap-2 text-xs font-medium">
-                          <CheckCircle2 className={`w-4 h-4 shrink-0 mt-0.5 ${
-                            isPrimary ? 'text-blue-400' : 'text-blue-600'
-                          }`} />
-                          <span className={isPrimary ? 'text-slate-200' : 'text-slate-700'}>{feature}</span>
+                          <CheckCircle2 className="w-4 h-4 shrink-0 mt-0.5 text-blue-400" />
+                          <span className="text-slate-200">{feature}</span>
                         </li>
                       ))}
                     </ul>
@@ -364,31 +286,19 @@ export default function ServicesView({ onNavigate }: ServicesViewProps) {
                 </div>
 
                 {/* Pricing & CTA Button */}
-                <div className={`mt-8 pt-6 border-t space-y-4 ${
-                  isPrimary ? 'border-slate-800' : 'border-slate-100'
-                }`}>
+                <div className="mt-8 pt-6 border-t border-slate-800 space-y-4">
                   <div>
-                    <span className={`block text-[10px] font-bold uppercase tracking-wider ${
-                      isPrimary ? 'text-slate-400' : 'text-slate-500'
-                    }`}>
+                    <span className="block text-[10px] font-bold uppercase tracking-wider text-slate-400">
                       Pricing Structure
                     </span>
-                    <span className={`block text-xs sm:text-sm font-extrabold mt-0.5 ${
-                      isPrimary ? 'text-blue-300' : 'text-slate-900'
-                    }`}>
+                    <span className="block text-xs sm:text-sm font-extrabold mt-0.5 text-blue-300">
                       {svc.priceTag}
                     </span>
                   </div>
 
                   <button
                     onClick={() => scrollToQuoteForm(targetDispatchType)}
-                    className={`w-full py-3.5 px-5 rounded-xl font-bold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 active:scale-95 shadow-md ${
-                      isPrimary
-                        ? 'bg-blue-600 hover:bg-blue-500 text-white hover:shadow-blue-500/25'
-                        : svc.id === 'stat-emergency'
-                          ? 'bg-slate-900 hover:bg-slate-800 text-white'
-                          : 'bg-blue-700 hover:bg-blue-800 text-white'
-                    }`}
+                    className="w-full py-3.5 px-5 rounded-xl font-bold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 active:scale-95 shadow-md bg-blue-600 hover:bg-blue-500 text-white hover:shadow-blue-500/25"
                     id={`btn-select-${svc.id}`}
                   >
                     <span>{svc.buttonText || 'Request Route Setup'}</span>
@@ -404,7 +314,7 @@ export default function ServicesView({ onNavigate }: ServicesViewProps) {
       {/* Simple Quote Request Form (Replacing the Complex Estimator) */}
       <section 
         id="quote-request-section" 
-        className="bg-slate-950 py-20 border-t border-slate-900 text-white relative overflow-hidden"
+        className="scroll-mt-20 bg-slate-950 py-20 border-t border-slate-900 text-white relative overflow-hidden"
       >
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_50%_at_50%_0%,rgba(37,99,235,0.07),transparent_100%)] pointer-events-none"></div>
         <div className="absolute top-0 right-0 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl pointer-events-none"></div>
@@ -575,11 +485,13 @@ export default function ServicesView({ onNavigate }: ServicesViewProps) {
                     <option value="Scheduled Daily Veterinary Sweep">Scheduled Daily Veterinary Sweep</option>
                     <option value="Medical Specimen Route">Medical Specimen Route</option>
                     <option value="STAT Emergency Run">STAT Emergency Run</option>
+                    <option value="Confidential Legal & Chain-of-Custody">Confidential Legal &amp; Chain-of-Custody</option>
                   </select>
                   <p className="text-[11px] text-slate-400 mt-1.5">
-                    {dispatchType === 'Scheduled Daily Veterinary Sweep' && 'Afternoon/evening recurring sweeps meeting IDEXX, Antech, or reference lab flight cutoffs.'}
+                    {dispatchType === 'Scheduled Daily Veterinary Sweep' && 'Recurring scheduled sweeps coordinated around IDEXX, Antech, and reference lab cutoffs.'}
                     {dispatchType === 'Medical Specimen Route' && 'HIPAA & OSHA compliant transport for clinical human specimens with locked chain-of-custody.'}
                     {dispatchType === 'STAT Emergency Run' && 'Drop-everything 24/7 emergency response dispatch across Northern Arizona.'}
+                    {dispatchType === 'Confidential Legal & Chain-of-Custody' && 'Locked security compartments and direct point-to-point transport with digital signature confirmation.'}
                   </p>
                 </div>
 
@@ -611,11 +523,11 @@ export default function ServicesView({ onNavigate }: ServicesViewProps) {
                     <span>Submit Dispatch Request</span>
                     <ArrowRight className="w-4 h-4 stroke-[2.5]" />
                   </button>
-                  <div className="flex flex-wrap items-center justify-between text-[11px] text-slate-400 mt-3 px-1">
+                  <div className="flex flex-wrap items-center justify-between gap-2 text-[11px] text-slate-400 mt-3 px-1">
                     <span>Direct Flagstaff dispatch review within 15 minutes.</span>
-                    <span className="flex items-center gap-1 text-slate-300 font-medium">
-                      <Phone className="w-3 h-3 text-blue-400" />
-                      24/7 STAT Desk: 928-547-1058
+                    <span className="flex items-center gap-1 text-slate-300 font-medium whitespace-nowrap">
+                      <Phone className="w-3 h-3 text-blue-400 shrink-0" />
+                      <span>24/7 Dispatch: <span className="whitespace-nowrap tabular-nums">928-547-1058</span></span>
                     </span>
                   </div>
                 </div>

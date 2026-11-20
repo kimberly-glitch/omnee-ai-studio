@@ -1,6 +1,6 @@
 {
-  "name": "Remix: Remix: Omnee Courier Solutions",
-  "description": "Reliable, compliant medical courier services in Flagstaff, tailored for healthcare providers, pharmacies, laboratories, and dental logistics.",
+  "name": "Remix: Omnee Courier Solutions",
+  "description": "HIPAA & OSHA compliant transport for clinical lab specimens, Category B diagnostic testing, dental, veterinary, and legal logistics across Northern Arizona.",
   "requestFramePermissions": [],
   "majorCapabilities": [
     "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { SERVICES } from '../data';
-import { Truck, Zap, Shield, ChevronRight, Search, Clock, Award, ArrowRight, ClipboardCheck, Phone, MapPin, Activity, Calendar } from 'lucide-react';
+import { Truck, Zap, Shield, ChevronRight, Search, Clock, Award, ArrowRight, ClipboardCheck, Phone, Mail, MapPin, Activity, Calendar, Lock } from 'lucide-react';
 
 interface HomeViewProps {
   onNavigate: (section: string) => void;
@@ -20,8 +20,8 @@ export default function HomeView({ onNavigate, onOpenTracking }: HomeViewProps) 
   };
 
   const stats = [
-    { value: 'After-Hours', label: 'Mon-Fri 5 PM - 6 AM', desc: 'Covering key overnight gaps' },
-    { value: '24/7 STAT', label: 'Emergency Availability', desc: 'Dispatch considered at all times' },
+    { value: '24/7 STAT', label: 'STAT & On-Demand Dispatch', desc: 'Open 24/7 for urgent deliveries' },
+    { value: 'Scheduled', label: 'Sweeps & Routine Pickups', desc: 'Custom routes around lab cutoffs' },
     { value: '4WD Vehicles', label: 'Winter Weather Ready', desc: 'Equipped for Flagstaff snow' },
     { value: '100%', label: 'HIPAA & OSHA Compliant', desc: 'Certified local courier standards' }
   ];
@@ -29,18 +29,17 @@ export default function HomeView({ onNavigate, onOpenTracking }: HomeViewProps) 
   return (
     <div className="space-y-20 pb-16">
       {/* 1. Hero Section */}
-      <section className="relative overflow-hidden bg-slate-950 text-white pt-8 pb-14 sm:py-20 md:py-32 px-4 sm:px-6 lg:px-8">
+      <section className="relative overflow-hidden bg-slate-950 text-white pt-8 pb-14 sm:py-20 md:py-28 px-4 sm:px-6 lg:px-8">
         {/* Subtle decorative grid/overlay */}
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#0f172a_1px,transparent_1px),linear-gradient(to_bottom,#0f172a_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] opacity-25"></div>
         <div className="absolute top-0 right-0 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl"></div>
         <div className="absolute bottom-0 left-0 w-96 h-96 bg-blue-400/10 rounded-full blur-3xl"></div>
 
-        <div className="max-w-7xl mx-auto relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-10 sm:gap-12 items-center">
-          {/* Left Hero Text */}
-          <div className="lg:col-span-7 space-y-4 sm:space-y-6 text-left">
+        <div className="max-w-7xl mx-auto relative z-10">
+          <div className="max-w-3xl space-y-4 sm:space-y-6 text-left">
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-blue-500/10 text-blue-400 border border-blue-500/20">
               <span className="w-2 h-2 rounded-full bg-blue-400 animate-pulse"></span>
-              <span>Flagstaff Diagnostic & Veterinary Specimen Logistics</span>
+              <span>Flagstaff Medical &amp; Category B Diagnostic Specimen Logistics</span>
             </div>
             
             <h1 className="text-3xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-white leading-[1.15]">
@@ -54,41 +53,14 @@ export default function HomeView({ onNavigate, onOpenTracking }: HomeViewProps) 
               Rooted in the concept of being all-encompassing, Omnee handles every dispatch as a complete local logistics partner. We offer a level of local availability that big companies simply cannot match. We are here to fill every gap with 'The Standard of One'—making a difference one delivery at a time, until we are the only solution you count on.
             </p>
 
-            {/* Quick Live Tracking Bar */}
-            <form onSubmit={handleTrackSubmit} className="max-w-md pt-2">
-              <div className="bg-slate-900 border border-slate-800 rounded-2xl p-2 flex gap-2 shadow-xl focus-within:border-blue-500/50 focus-within:ring-2 focus-within:ring-blue-500/10 transition-all">
-                <div className="flex-1 flex items-center pl-3">
-                  <Search className="w-5 h-5 text-slate-500 mr-2 shrink-0" />
-                  <input
-                    type="text"
-                    placeholder="Enter Tracking ID (e.g. OMN-7182)..."
-                    value={trackInput}
-                    onChange={(e) => setTrackInput(e.target.value)}
-                    className="w-full bg-transparent text-white font-mono text-sm focus:outline-none placeholder:text-slate-500 font-semibold uppercase tracking-wide"
-                    id="hero-track-input"
-                  />
-                </div>
-                <button
-                  type="submit"
-                  className="bg-blue-700 hover:bg-blue-600 text-white font-bold px-5 py-3 rounded-xl transition-all shadow-md active:scale-95 text-xs uppercase tracking-wider flex items-center gap-1.5"
-                  id="hero-track-btn"
-                >
-                  <span>Track Parcel</span>
-                  <ArrowRight className="w-4 h-4 stroke-[2.5]" />
-                </button>
-              </div>
-              <p className="text-[10px] text-slate-500 mt-2.5 font-medium pl-4">
-                Try searching <span onClick={() => setTrackInput('OMN-7182')} className="text-blue-400 cursor-pointer hover:underline font-bold font-mono">OMN-7182</span> or <span onClick={() => setTrackInput('OMN-4912')} className="text-blue-400 cursor-pointer hover:underline font-bold font-mono">OMN-4912</span> for a live demonstration.
-              </p>
-            </form>
-
-            <div className="flex flex-wrap items-center gap-4 pt-4">
+            <div className="flex flex-wrap items-center gap-4 pt-2">
               <button
                 onClick={() => onNavigate('services')}
-                className="bg-white hover:bg-slate-100 text-slate-950 font-bold text-xs uppercase tracking-wider px-6 py-3.5 rounded-xl shadow-md hover:shadow-lg transition-all flex items-center gap-2 active:scale-95"
+                className="bg-blue-700 hover:bg-blue-600 text-white font-bold text-xs uppercase tracking-wider px-6 py-3.5 rounded-xl shadow-md hover:shadow-lg transition-all flex items-center gap-2 active:scale-95"
+                id="hero-services-btn"
               >
-                <span>Explore Services</span>
-                <ChevronRight className="w-4 h-4 text-slate-950" />
+                <span>Our Services</span>
+                <ChevronRight className="w-4 h-4 text-white" />
               </button>
               
               <button
@@ -97,65 +69,6 @@ export default function HomeView({ onNavigate, onOpenTracking }: HomeViewProps) 
               >
                 <span>Request Custom Quote</span>
               </button>
-            </div>
-          </div>
-
-          {/* Right Hero Illustration / Mock Tracking Board */}
-          <div className="lg:col-span-5 relative mt-8 lg:mt-0">
-            <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-2xl relative overflow-hidden group">
-              <div className="absolute top-0 right-0 w-48 h-48 bg-blue-500/5 rounded-full blur-2xl"></div>
-              
-              {/* Fake Active Feed Dashboard Header */}
-              <div className="flex justify-between items-center mb-6 pb-4 border-b border-slate-800">
-                <div className="flex items-center gap-2">
-                  <div className="w-2.5 h-2.5 rounded-full bg-blue-500 animate-pulse"></div>
-                  <span className="text-xs font-bold uppercase tracking-wider text-slate-300">Live Dispatch Monitor</span>
-                </div>
-                <span className="text-[10px] font-mono text-slate-500 uppercase">SYS-REG: Active</span>
-              </div>
-
-              {/* Feed Items */}
-              <div className="space-y-4">
-                <div className="bg-slate-950 border border-slate-800/80 rounded-xl p-3.5 flex items-start gap-3 text-left">
-                  <div className="p-2 bg-blue-950/80 border border-blue-900 text-blue-400 rounded-lg shrink-0">
-                    <Truck className="w-4 h-4" />
-                  </div>
-                  <div>
-                    <div className="flex justify-between items-center mb-1">
-                      <span className="font-mono text-xs font-bold text-blue-400">OMN-7182</span>
-                      <span className="text-[9px] bg-sky-950 text-sky-400 border border-sky-900 px-1.5 py-0.5 rounded-full font-bold">STAT MEDICAL</span>
-                    </div>
-                    <p className="text-xs text-white font-semibold">Climate stable Specimen en-route to FMC</p>
-                    <p className="text-[10px] text-slate-500 mt-1">In Transit • Flagstaff Medical Center</p>
-                  </div>
-                </div>
-
-                <div className="bg-slate-950 border border-slate-800/80 rounded-xl p-3.5 flex items-start gap-3 text-left">
-                  <div className="p-2 bg-blue-950/80 border border-blue-900 text-blue-400 rounded-lg shrink-0">
-                    <Zap className="w-4 h-4" />
-                  </div>
-                  <div>
-                    <div className="flex justify-between items-center mb-1">
-                      <span className="font-mono text-xs font-bold text-blue-400">OMN-4912</span>
-                      <span className="text-[9px] bg-blue-950 text-blue-400 border border-blue-900 px-1.5 py-0.5 rounded-full font-bold">RUSH SAME-DAY</span>
-                    </div>
-                    <p className="text-xs text-white font-semibold">Rx Consignment assigned to Courier #108</p>
-                    <p className="text-[10px] text-slate-500 mt-1">Out for Local Delivery • Coconino County Clinic</p>
-                  </div>
-                </div>
-
-                {/* Logistics Route Visual Mockup */}
-                <div className="pt-2">
-                  <div className="flex justify-between text-[10px] text-slate-400 font-bold uppercase mb-2">
-                    <span>Origin: Sedona Hub</span>
-                    <span>Transit: 28 Miles</span>
-                    <span>Dest: Flagstaff Medical Dist.</span>
-                  </div>
-                  <div className="w-full bg-slate-950 h-1.5 rounded-full overflow-hidden relative border border-slate-800">
-                    <div className="absolute left-0 top-0 bottom-0 w-2/3 bg-gradient-to-r from-blue-600 to-blue-400 rounded-full animate-pulse"></div>
-                  </div>
-                </div>
-              </div>
             </div>
           </div>
         </div>
@@ -211,7 +124,7 @@ export default function HomeView({ onNavigate, onOpenTracking }: HomeViewProps) 
             </div>
             <h3 className="text-lg font-bold text-slate-900">Reliable Timing & Weather Readiness</h3>
             <p className="text-slate-500 text-sm leading-relaxed">
-              Leveraging 4WD capabilities and technical logistics to navigate Flagstaff's winter conditions, ensuring STAT dispatches arrive with mathematical accuracy regardless of the weather.
+              Leveraging 4WD capabilities and technical logistics to navigate Flagstaff's winter conditions, ensuring STAT dispatches arrive with accuracy and timely delivery regardless of the weather.
             </p>
           </div>
 
@@ -261,7 +174,7 @@ export default function HomeView({ onNavigate, onOpenTracking }: HomeViewProps) 
             </button>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {SERVICES.map((svc) => (
               <div 
                 key={svc.id} 
@@ -271,6 +184,7 @@ export default function HomeView({ onNavigate, onOpenTracking }: HomeViewProps) 
                   <div className="w-10 h-10 rounded-xl bg-slate-50 text-slate-900 flex items-center justify-center font-bold">
                     {svc.id === 'veterinary-routes' ? <Activity className="w-5 h-5 text-blue-600" /> : 
                      svc.id === 'medical-specimen' ? <Shield className="w-5 h-5 text-indigo-600" /> : 
+                     svc.id === 'legal-custody' ? <Lock className="w-5 h-5 text-emerald-600" /> :
                      <Zap className="w-5 h-5 text-rose-500" />}
                   </div>
                   <div>
@@ -300,7 +214,151 @@ export default function HomeView({ onNavigate, onOpenTracking }: HomeViewProps) 
         </div>
       </section>
 
-      {/* 5. Compliance & Standards Section */}
+      {/* 5. Dedicated Live Dispatch & Parcel Tracking Hub */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" id="live-dispatch-section">
+        <div className="bg-slate-950 text-white rounded-3xl p-6 sm:p-10 md:p-12 border border-slate-800 shadow-2xl relative overflow-hidden">
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,#0f172a_1px,transparent_1px),linear-gradient(to_bottom,#0f172a_1px,transparent_1px)] bg-[size:4rem_4rem] opacity-20 pointer-events-none"></div>
+          <div className="absolute top-0 right-0 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+          <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
+            {/* Left Info & Direct Dispatch Desk */}
+            <div className="lg:col-span-5 space-y-5 text-left">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shrink-0"></span>
+                <span>Live Tracking &amp; Dispatch</span>
+              </div>
+
+              <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white leading-tight">
+                Live Dispatch Monitor &amp; Parcel Tracking
+              </h2>
+
+              <p className="text-slate-300 text-sm leading-relaxed">
+                Track active clinical deliveries, verify chain-of-custody checkpoints, or coordinate directly with our Flagstaff dispatch desk — all in one place.
+              </p>
+
+              {/* Direct 24/7 Dispatch Desk Box */}
+              <div className="bg-slate-900/80 border border-slate-800 rounded-2xl p-4 space-y-3">
+                <p className="text-xs font-bold text-slate-200 leading-snug">
+                  Open 24/7 for STAT &amp; On-Demand — Contact Us for Scheduled Sweeps &amp; Routine Pickups
+                </p>
+                <div className="flex flex-wrap items-center gap-2.5 text-xs font-mono">
+                  <a
+                    href="tel:9285471058"
+                    className="inline-flex items-center gap-1.5 text-white hover:text-blue-400 font-bold bg-slate-950 border border-slate-800 px-3 py-1.5 rounded-lg transition-colors whitespace-nowrap"
+                  >
+                    <Phone className="w-3.5 h-3.5 text-blue-400 shrink-0" />
+                    <span className="whitespace-nowrap tabular-nums">928-547-1058</span>
+                  </a>
+                  <a
+                    href="mailto:Info@omneecourier.com"
+                    className="inline-flex items-center gap-1.5 text-slate-300 hover:text-blue-400 bg-slate-950 border border-slate-800 px-3 py-1.5 rounded-lg transition-colors whitespace-nowrap"
+                  >
+                    <Mail className="w-3.5 h-3.5 text-blue-400 shrink-0" />
+                    <span className="whitespace-nowrap">Info@omneecourier.com</span>
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            {/* Right Interactive Live Dispatch Monitor & Track Parcel Panel */}
+            <div className="lg:col-span-7">
+              <div className="bg-slate-900 border border-slate-800 rounded-2xl sm:rounded-3xl p-5 sm:p-6 shadow-2xl relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-48 h-48 bg-blue-500/5 rounded-full blur-2xl pointer-events-none"></div>
+
+                {/* Live Dispatch Monitor Header */}
+                <div className="flex justify-between items-center mb-4 pb-4 border-b border-slate-800">
+                  <div className="flex items-center gap-2">
+                    <div className="w-2.5 h-2.5 rounded-full bg-blue-500 animate-pulse"></div>
+                    <span className="text-xs font-bold uppercase tracking-wider text-slate-300">Live Dispatch Monitor</span>
+                  </div>
+                  <span className="text-[10px] font-mono text-slate-500 uppercase">SYS-REG: Active</span>
+                </div>
+
+                {/* Grouped Quick Live Tracking Bar */}
+                <form onSubmit={handleTrackSubmit} className="mb-5 pb-5 border-b border-slate-800/80 text-left">
+                  <div className="bg-slate-950 border border-slate-800 rounded-xl p-1.5 flex items-center gap-2 shadow-inner focus-within:border-blue-500/50 focus-within:ring-2 focus-within:ring-blue-500/10 transition-all">
+                    <div className="flex-1 min-w-0 flex items-center pl-2.5">
+                      <Search className="w-4 h-4 text-slate-500 mr-2 shrink-0" />
+                      <input
+                        type="text"
+                        placeholder="Enter Tracking ID (e.g. OMN-7182)..."
+                        value={trackInput}
+                        onChange={(e) => setTrackInput(e.target.value)}
+                        className="w-full min-w-0 bg-transparent text-white font-mono text-xs sm:text-sm focus:outline-none placeholder:text-slate-500 font-semibold uppercase tracking-wide"
+                        id="hero-track-input"
+                      />
+                    </div>
+                    <button
+                      type="submit"
+                      className="shrink-0 whitespace-nowrap bg-blue-700 hover:bg-blue-600 text-white font-bold px-4 py-2.5 rounded-lg transition-all shadow-md active:scale-95 text-xs uppercase tracking-wider flex items-center gap-1.5"
+                      id="hero-track-btn"
+                    >
+                      <span>Track Parcel</span>
+                      <ArrowRight className="w-3.5 h-3.5 stroke-[2.5] shrink-0" />
+                    </button>
+                  </div>
+                  <p className="text-[10px] text-slate-500 mt-2 font-medium pl-1">
+                    Try searching <span onClick={() => setTrackInput('OMN-7182')} className="text-blue-400 cursor-pointer hover:underline font-bold font-mono">OMN-7182</span> or <span onClick={() => setTrackInput('OMN-4912')} className="text-blue-400 cursor-pointer hover:underline font-bold font-mono">OMN-4912</span> for a live demonstration.
+                  </p>
+                </form>
+
+                {/* Active Feed Items */}
+                <div className="space-y-4">
+                  <button
+                    type="button"
+                    onClick={() => onOpenTracking('OMN-7182')}
+                    className="w-full bg-slate-950 hover:bg-slate-950/80 border border-slate-800/80 hover:border-blue-500/40 rounded-xl p-3.5 flex items-start gap-3 text-left transition-colors"
+                  >
+                    <div className="p-2 bg-blue-950/80 border border-blue-900 text-blue-400 rounded-lg shrink-0">
+                      <Truck className="w-4 h-4" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex justify-between items-center mb-1 gap-2">
+                        <span className="font-mono text-xs font-bold text-blue-400">OMN-7182</span>
+                        <span className="text-[9px] bg-sky-950 text-sky-400 border border-sky-900 px-1.5 py-0.5 rounded-full font-bold whitespace-nowrap">STAT MEDICAL</span>
+                      </div>
+                      <p className="text-xs text-white font-semibold">Climate stable Specimen en-route to FMC</p>
+                      <p className="text-[10px] text-slate-500 mt-1">In Transit • Flagstaff Medical Center</p>
+                    </div>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => onOpenTracking('OMN-4912')}
+                    className="w-full bg-slate-950 hover:bg-slate-950/80 border border-slate-800/80 hover:border-blue-500/40 rounded-xl p-3.5 flex items-start gap-3 text-left transition-colors"
+                  >
+                    <div className="p-2 bg-blue-950/80 border border-blue-900 text-blue-400 rounded-lg shrink-0">
+                      <Zap className="w-4 h-4" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex justify-between items-center mb-1 gap-2">
+                        <span className="font-mono text-xs font-bold text-blue-400">OMN-4912</span>
+                        <span className="text-[9px] bg-blue-950 text-blue-400 border border-blue-900 px-1.5 py-0.5 rounded-full font-bold whitespace-nowrap">RUSH SAME-DAY</span>
+                      </div>
+                      <p className="text-xs text-white font-semibold">Rx Consignment assigned to Courier #108</p>
+                      <p className="text-[10px] text-slate-500 mt-1">Out for Local Delivery • Coconino County Clinic</p>
+                    </div>
+                  </button>
+
+                  {/* Logistics Route Visual */}
+                  <div className="pt-2">
+                    <div className="flex justify-between text-[10px] text-slate-400 font-bold uppercase mb-2 gap-2">
+                      <span>Origin: Sedona Hub</span>
+                      <span>Transit: 28 Miles</span>
+                      <span>Dest: Flagstaff Medical Dist.</span>
+                    </div>
+                    <div className="w-full bg-slate-950 h-1.5 rounded-full overflow-hidden relative border border-slate-800">
+                      <div className="absolute left-0 top-0 bottom-0 w-2/3 bg-gradient-to-r from-blue-600 to-blue-400 rounded-full animate-pulse"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 6. Compliance & Standards Section */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="bg-gradient-to-br from-slate-900 to-slate-950 text-white rounded-3xl p-6 sm:p-12 md:p-16 border border-slate-800 relative overflow-hidden text-left shadow-2xl">
           {/* Shaded visual background effect using brand colors */}
@@ -370,11 +428,11 @@ export default function HomeView({ onNavigate, onOpenTracking }: HomeViewProps) 
                 <ArrowRight className="w-4 h-4 stroke-[2.5]" />
               </button>
               <a
-                href="tel:928-547-1058"
-                className="text-slate-300 hover:text-white font-bold text-xs uppercase tracking-wider px-4 py-3 flex items-center gap-1.5 font-mono"
+                href="tel:9285471058"
+                className="text-slate-300 hover:text-white font-bold text-xs uppercase tracking-wider px-4 py-3 flex items-center gap-1.5 font-mono whitespace-nowrap"
               >
-                <Phone className="w-4 h-4 text-blue-500" />
-                <span>928-547-1058</span>
+                <Phone className="w-4 h-4 text-blue-500 shrink-0" />
+                <span className="whitespace-nowrap tabular-nums">928-547-1058</span>
               </a>
             </div>
           </div>

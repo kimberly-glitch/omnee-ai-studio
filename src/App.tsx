@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Phone } from 'lucide-react';
 import Navigation, { Footer } from './components/Navigation';
 import HomeView from './components/HomeView';
@@ -11,11 +11,31 @@ import ServicesView from './components/ServicesView';
 import AboutView from './components/AboutView';
 import ContactView from './components/ContactView';
 import TrackingWidget from './components/TrackingWidget';
+import { DispatchType } from './types';
 
 export default function App() {
   const [activeSection, setActiveSection] = useState<string>('home');
   const [trackingOpen, setTrackingOpen] = useState(false);
   const [prefillCode, setPrefillCode] = useState('');
+  const [pendingQuoteRequest, setPendingQuoteRequest] = useState<{
+    type: DispatchType;
+    id: number;
+  } | null>(null);
+  const quoteRequestCounterRef = useRef(0);
+
+  const handleNavigate = (section: string) => {
+    setPendingQuoteRequest(null);
+    setActiveSection(section);
+  };
+
+  const handleSelectFooterService = (dispatchType: DispatchType) => {
+    quoteRequestCounterRef.current += 1;
+    setPendingQuoteRequest({
+      type: dispatchType,
+      id: quoteRequestCounterRef.current
+    });
+    setActiveSection('services');
+  };
 
   const handleOpenTrackingModal = (code?: string) => {
     if (code) {
@@ -37,17 +57,22 @@ export default function App() {
         return (
           <HomeView 
             onNavigate={(section) => {
-              setActiveSection(section);
+              handleNavigate(section);
               window.scrollTo({ top: 0, behavior: 'smooth' });
             }} 
             onOpenTracking={handleOpenTrackingModal} 
           />
         );
       case 'services':
-        return <ServicesView onNavigate={(section) => {
-          setActiveSection(section);
-          window.scrollTo({ top: 0, behavior: 'smooth' });
-        }} />;
+        return (
+          <ServicesView
+            onNavigate={(section) => {
+              handleNavigate(section);
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
+            pendingQuoteRequest={pendingQuoteRequest}
+          />
+        );
       case 'about':
         return <AboutView />;
       case 'contact':
@@ -56,7 +81,7 @@ export default function App() {
         return (
           <HomeView 
             onNavigate={(section) => {
-              setActiveSection(section);
+              handleNavigate(section);
               window.scrollTo({ top: 0, behavior: 'smooth' });
             }} 
             onOpenTracking={handleOpenTrackingModal} 
@@ -70,7 +95,7 @@ export default function App() {
       {/* Navigation Header */}
       <Navigation 
         activeSection={activeSection} 
-        setActiveSection={setActiveSection} 
+        setActiveSection={handleNavigate} 
         onOpenTrackingModal={handleOpenTrackingModal} 
       />
 
@@ -80,7 +105,10 @@ export default function App() {
       </main>
 
       {/* Footer */}
-      <Footer setActiveSection={setActiveSection} />
+      <Footer
+        setActiveSection={handleNavigate}
+        onSelectServiceQuote={handleSelectFooterService}
+      />
 
       {/* Persistent Mobile Sticky Quick-Call Bar */}
       <aside 

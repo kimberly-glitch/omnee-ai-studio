@@ -5,18 +5,18 @@ export const SERVICES: ServiceDetail[] = [
     id: 'veterinary-routes',
     title: 'Veterinary Diagnostic Routes',
     subtitle: 'Scheduled Sweeps & Reference Lab Connections',
-    shortDesc: 'Recurring daily afternoon and evening sweeps timed around animal hospital, clinic, and diagnostic lab cutoffs. Temperature-controlled transport (ambient, refrigerated, frozen) for blood chemistry, urine profiles, cytology, and biopsy jars to meet IDEXX, Antech, and regional lab cutoffs.',
-    fullDesc: 'Recurring daily afternoon and evening sweeps timed around animal hospital, clinic, and diagnostic lab cutoffs. Temperature-controlled transport (ambient, refrigerated, frozen) for blood chemistry, urine profiles, cytology, and biopsy jars to meet IDEXX, Antech, and regional lab cutoffs.',
+    shortDesc: 'Scheduled sweeps and routine pickups timed around animal hospital, clinic, and diagnostic lab cutoffs. Temperature-controlled transport (ambient, refrigerated, frozen) for blood chemistry, urine profiles, cytology, and biopsy jars to meet IDEXX, Antech, and regional lab cutoffs.',
+    fullDesc: 'Scheduled sweeps and routine pickups timed around animal hospital, clinic, and diagnostic lab cutoffs. Temperature-controlled transport (ambient, refrigerated, frozen) for blood chemistry, urine profiles, cytology, and biopsy jars to meet IDEXX, Antech, and regional lab cutoffs.',
     iconName: 'Activity',
     features: [
-      'Scheduled Route Sweeps: Daily afternoon and evening sweeps timed around lab cutoffs',
+      'Custom-scheduled sweeps & routine pickups around lab cutoffs',
       'Temperature-controlled transport (ambient, refrigerated, frozen)',
       'IDEXX, Antech & regional reference lab cutoff adherence',
       'Blood chemistry, urine profiles, cytology & biopsy jars'
     ],
     basePrice: 35.00,
     perMileRate: 1.50,
-    deliveryTime: 'Daily Afternoon & Evening Sweeps',
+    deliveryTime: 'Scheduled Sweeps',
     priceTag: 'Starting at $35.00 / Sweep • Recurring Route Discounts Available',
     buttonText: 'Request Route Setup'
   },
@@ -24,18 +24,18 @@ export const SERVICES: ServiceDetail[] = [
     id: 'medical-specimen',
     title: 'Medical Specimen Transport',
     subtitle: 'Temperature-Monitored Clinical Transport',
-    shortDesc: 'Dedicated after-hours route coverage (Mon–Fri 5:00 PM to 6:00 AM) and standard local routing for blood vials, urine specimens, and Category B diagnostic materials. Fully HIPAA and OSHA compliant with a locked chain of custody.',
-    fullDesc: 'Dedicated after-hours route coverage (Mon–Fri 5:00 PM to 6:00 AM) and standard local routing for blood vials, urine specimens, and Category B diagnostic materials. Fully HIPAA and OSHA compliant with a locked chain of custody.',
+    shortDesc: 'Scheduled clinic pickups and local clinical routing for blood vials, urine specimens, and Category B diagnostic materials—with 24/7 STAT & on-demand support available when urgent needs arise. Fully HIPAA and OSHA compliant with a locked chain of custody.',
+    fullDesc: 'Scheduled clinic pickups and local clinical routing for blood vials, urine specimens, and Category B diagnostic materials—with 24/7 STAT & on-demand support available when urgent needs arise. Fully HIPAA and OSHA compliant with a locked chain of custody.',
     iconName: 'ShieldAlert',
     features: [
-      'Dedicated After-Hours Route Coverage: Mon–Fri 5:00 PM – 6:00 AM',
-      'Bridging critical overnight gaps for local clinics and reference labs',
+      'Scheduled routine pickups with 24/7 STAT & on-demand availability',
+      'Reliable transport connecting local clinics and reference labs',
       'Category B diagnostic material handling with locked chain of custody',
       'OSHA and HIPAA certified compliance with temperature logging'
     ],
     basePrice: 45.00,
     perMileRate: 1.85,
-    deliveryTime: 'After-Hours: Mon–Fri 5PM–6AM & Sweeps',
+    deliveryTime: 'Scheduled Pickups',
     priceTag: 'Starting at $45.00 Base • Tiered Mileage',
     buttonText: 'Request Route Setup'
   },
@@ -43,20 +43,38 @@ export const SERVICES: ServiceDetail[] = [
     id: 'stat-emergency',
     title: 'STAT Emergency Dispatches',
     subtitle: '24/7 Drop-Everything Priority Logistics',
-    shortDesc: '24/7 Availability: Immediate drop-everything priority service, 365 days a year, including weekends and holidays. Bypasses standard routing for urgent, life-critical logistics.',
-    fullDesc: '24/7 Availability: Immediate drop-everything priority service, 365 days a year, including weekends and holidays. Bypasses standard routing for urgent, life-critical logistics.',
+    shortDesc: 'Open 24/7 for immediate, drop-everything STAT & on-demand priority dispatches. Bypasses standard routing for urgent, life-critical diagnostic and clinical logistics.',
+    fullDesc: 'Open 24/7 for immediate, drop-everything STAT & on-demand priority dispatches. Bypasses standard routing for urgent, life-critical diagnostic and clinical logistics.',
     iconName: 'Zap',
     features: [
-      'STAT Emergency Dispatches: 24/7 Availability (365 days a year, weekends & holidays)',
+      'Open 24/7 for STAT & on-demand emergency dispatches',
       'Immediate drop-everything priority response & direct dedicated courier',
-      'Active Dispatch Desk: 24/7 on-call dispatch (928-547-1058)',
+      'Direct Dispatch Desk: 928-547-1058 or Info@omneecourier.com',
       'Bypasses standard routing for rapid time-critical delivery'
     ],
     basePrice: 0.00,
     perMileRate: 0.00,
-    deliveryTime: '24/7 Availability • 365 Days / Year',
+    deliveryTime: 'Open 24/7 • STAT & On-Demand',
     priceTag: 'Contact Dispatch for Priority STAT Rates',
     buttonText: 'Request STAT Dispatch'
+  },
+  {
+    id: 'legal-custody',
+    title: 'Confidential Legal & Chain-of-Custody Courier',
+    subtitle: 'Locked Security & Direct Document Transport',
+    shortDesc: 'Secure, time-sensitive transport for legal filings, court documents, contracts, and confidential business records across Northern Arizona. Equipped with dedicated locked security compartments and lockboxes to maintain strict chain-of-custody and privacy from pickup to signature confirmation.',
+    fullDesc: 'Secure, time-sensitive transport for legal filings, court documents, contracts, and confidential business records across Northern Arizona. Equipped with dedicated locked security compartments and lockboxes to maintain strict chain-of-custody and privacy from pickup to signature confirmation.',
+    iconName: 'Lock',
+    features: [
+      'Locked Security Compartments',
+      'Direct Point-to-Point Transport',
+      'Digital Signature & Chain-of-Custody'
+    ],
+    basePrice: 45.00,
+    perMileRate: 1.85,
+    deliveryTime: 'Direct Point-to-Point',
+    priceTag: 'Contact Dispatch for Legal & Custody Rates',
+    buttonText: 'Request Legal Dispatch'
   }
 ];
 
@@ -65,16 +83,16 @@ export const TESTIMONIALS: Testimonial[] = [];
 export const TEAM_MEMBERS: TeamMember[] = [
   {
     id: 'm1',
-    name: 'President & Founder',
-    role: 'Chief of Clinical Integrity',
-    bio: 'A Certified Medical Assistant with deep expertise in medical administration, our President focuses on regulatory compliance, safe handling, and clinical care standards to ensure every Omnee protocol meets the highest clinical standards.',
+    name: 'Clinical Integrity Leadership',
+    role: 'Certified Medical Assistants',
+    bio: 'Certified Medical Assistants with deep expertise in medical administration and clinical urgency, focused on regulatory compliance, safe handling, and clinical care standards to ensure every Omnee protocol meets the highest clinical standards.',
     imageSeed: 'executive_clinical'
   },
   {
     id: 'm2',
-    name: 'Managing Partner',
-    role: 'Chief of Logistics',
-    bio: 'A versatile operations professional, our Managing Partner focuses on vehicle readiness, maintaining our 4WD capabilities to eliminate weather downtime, and directly coordinating local routes and urgent STAT dispatches.',
+    name: 'Operations & Fleet Leadership',
+    role: 'Technical Operations Professionals',
+    bio: 'Technical operations professionals focused on vehicle readiness, maintaining our 4WD capabilities to eliminate weather downtime, and directly coordinating local routes and urgent STAT dispatches.',
     imageSeed: 'executive_ops'
   }
 ];
@@ -119,7 +137,7 @@ export const MOCK_SHIPMENTS: Record<string, Shipment> = {
       {
         status: 'created',
         label: 'Shipment Registered',
-        timestamp: '2026-07-07, 1:15 PM',
+        timestamp: 'Today, 1:15 PM',
         location: 'Flagstaff Hub',
         description: 'Electronic billing info received, label printed.',
         completed: true
@@ -127,7 +145,7 @@ export const MOCK_SHIPMENTS: Record<string, Shipment> = {
       {
         status: 'picked_up',
         label: 'Picked Up by Courier',
-        timestamp: '2026-07-07, 2:00 PM',
+        timestamp: 'Today, 2:00 PM',
         location: 'Client Facility',
         description: 'Package secured and logged by Courier #402. Temp check normal (4°C).',
         completed: true
@@ -135,7 +153,7 @@ export const MOCK_SHIPMENTS: Record<string, Shipment> = {
       {
         status: 'in_transit',
         label: 'In Transit',
-        timestamp: '2026-07-07, 3:30 PM',
+        timestamp: 'Today, 3:30 PM',
         location: 'I-40 Eastbound',
         description: 'Shipment is en route. Climate containment active.',
         completed: true
@@ -173,7 +191,7 @@ export const MOCK_SHIPMENTS: Record<string, Shipment> = {
       {
         status: 'created',
         label: 'Shipment Registered',
-        timestamp: '2026-07-07, 11:30 AM',
+        timestamp: 'Today, 11:30 AM',
         location: 'Sedona Hub',
         description: 'Courier route scheduled, high-priority flag active.',
         completed: true
@@ -181,7 +199,7 @@ export const MOCK_SHIPMENTS: Record<string, Shipment> = {
       {
         status: 'picked_up',
         label: 'Picked Up',
-        timestamp: '2026-07-07, 12:10 PM',
+        timestamp: 'Today, 12:10 PM',
         location: 'Sedona Facility',
         description: 'Document sealed in tamper-proof package. Picked up by Courier #108.',
         completed: true
@@ -189,7 +207,7 @@ export const MOCK_SHIPMENTS: Record<string, Shipment> = {
       {
         status: 'in_transit',
         label: 'In Transit',
-        timestamp: '2026-07-07, 1:40 PM',
+        timestamp: 'Today, 1:40 PM',
         location: 'I-17 Northbound Node',
         description: 'Consolidated with regional express routes.',
         completed: true
@@ -197,7 +215,7 @@ export const MOCK_SHIPMENTS: Record<string, Shipment> = {
       {
         status: 'out_for_delivery',
         label: 'Out for Delivery',
-        timestamp: '2026-07-07, 3:10 PM',
+        timestamp: 'Today, 3:10 PM',
         location: 'Flagstaff South Division',
         description: 'Courier #108 is currently heading to clinic archives.',
         completed: true
@@ -227,7 +245,7 @@ export const MOCK_SHIPMENTS: Record<string, Shipment> = {
       {
         status: 'created',
         label: 'Label Printed',
-        timestamp: '2026-07-05, 9:00 AM',
+        timestamp: 'Yesterday, 9:00 AM',
         location: 'Fulfillment Center',
         description: 'Shipper loaded weight and scheduled collection.',
         completed: true
@@ -235,7 +253,7 @@ export const MOCK_SHIPMENTS: Record<string, Shipment> = {
       {
         status: 'picked_up',
         label: 'Collected',
-        timestamp: '2026-07-05, 4:30 PM',
+        timestamp: 'Yesterday, 11:30 AM',
         location: 'Williams Hub',
         description: 'Cargo consolidated into eastward transport container.',
         completed: true
@@ -243,7 +261,7 @@ export const MOCK_SHIPMENTS: Record<string, Shipment> = {
       {
         status: 'in_transit',
         label: 'Line Haul Transit',
-        timestamp: '2026-07-06, 6:00 AM',
+        timestamp: 'Yesterday, 1:00 PM',
         location: 'I-40 Corridor East',
         description: 'Arrived at West Flagstaff Hub.',
         completed: true
@@ -251,7 +269,7 @@ export const MOCK_SHIPMENTS: Record<string, Shipment> = {
       {
         status: 'out_for_delivery',
         label: 'Out for Delivery',
-        timestamp: '2026-07-06, 11:15 AM',
+        timestamp: 'Yesterday, 2:15 PM',
         location: 'Central Flagstaff Hub',
         description: 'Loaded onto delivery vehicle.',
         completed: true
@@ -259,7 +277,7 @@ export const MOCK_SHIPMENTS: Record<string, Shipment> = {
       {
         status: 'delivered',
         label: 'Package Delivered',
-        timestamp: '2026-07-06, 3:42 PM',
+        timestamp: 'Yesterday, 3:42 PM',
         location: 'Recipient Pharmacy',
         description: 'Delivered. Handed to staff. Signed by M. PENDELTON.',
         completed: true
@@ -316,7 +334,7 @@ export function generateDynamicShipment(trackingNum: string): Shipment {
     {
       status: 'created',
       label: 'Shipment Registered',
-      timestamp: '2026-07-07, 08:30 AM',
+      timestamp: 'Today, 08:30 AM',
       location: `${originCity} Office`,
       description: 'Courier dispatch registered. Secure packaging verification complete.',
       completed: true
@@ -327,7 +345,7 @@ export function generateDynamicShipment(trackingNum: string): Shipment {
     history.push({
       status: 'picked_up',
       label: 'Picked Up by Courier',
-      timestamp: '2026-07-07, 10:15 AM',
+      timestamp: 'Today, 10:15 AM',
       location: `${originCity} Courier`,
       description: 'Vetted driver picked up package from sender facility.',
       completed: true
@@ -338,7 +356,7 @@ export function generateDynamicShipment(trackingNum: string): Shipment {
     history.push({
       status: 'in_transit',
       label: 'Transit Facility Sorting',
-      timestamp: '2026-07-07, 01:10 PM',
+      timestamp: 'Today, 01:10 PM',
       location: 'Regional Sorting Hub',
       description: 'Sorted and scanned into climate-controlled transport container.',
       completed: true
@@ -349,7 +367,7 @@ export function generateDynamicShipment(trackingNum: string): Shipment {
     history.push({
       status: 'out_for_delivery',
       label: 'Out for Local Delivery',
-      timestamp: '2026-07-07, 03:00 PM',
+      timestamp: 'Today, 03:00 PM',
       location: `${destCity} Local Dispatch`,
       description: 'Assigned to premium localized delivery driver.',
       completed: true
@@ -360,7 +378,7 @@ export function generateDynamicShipment(trackingNum: string): Shipment {
     history.push({
       status: 'delivered',
       label: 'Delivered',
-      timestamp: '2026-07-07, 04:12 PM',
+      timestamp: 'Today, 04:12 PM',
       location: destCity,
       description: 'Delivered securely to receptionist. Signed: COURIER-SAFE.',
       completed: true

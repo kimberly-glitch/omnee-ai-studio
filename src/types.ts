@@ -36,12 +36,18 @@ export interface ServiceDetail {
   buttonText?: string;
 }
 
+export type DispatchType =
+  | 'Scheduled Daily Veterinary Sweep'
+  | 'Medical Specimen Route'
+  | 'STAT Emergency Run'
+  | 'Confidential Legal & Chain-of-Custody';
+
 export interface DispatchQuoteRequest {
   facilityName: string;
   contactName: string;
   phone: string;
   email: string;
-  dispatchType: 'Scheduled Daily Veterinary Sweep' | 'Medical Specimen Route' | 'STAT Emergency Run';
+  dispatchType: DispatchType;
   routeAndTemperatureDetails: string;
 }
 

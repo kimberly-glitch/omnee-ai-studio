@@ -51,7 +51,7 @@ export default function AboutView() {
               Clinical Integrity Meets Logistical Reliability
             </h2>
             <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
-              Omnee Courier Solutions was born from a singular vision: to replace generic delivery services with a dedicated, medical-grade logistics engine. Co-founded by our President, a Certified Medical Assistant with a deep understanding of clinical urgency, and our Managing Partner, a technical operations professional focused on vehicle readiness.
+              Omnee Courier Solutions was born from a singular vision: to replace generic delivery services with a dedicated, medical-grade logistics engine. It was co-founded by Certified Medical Assistants with a deep understanding of clinical urgency and technical operations professionals focused on vehicle readiness.
             </p>
             <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
               Together, they have built a service that prioritizes the sanctity of the specimen and the timing of the dispatch. From maintaining high-reliability, 4WD-equipped vehicles to enforcing strict HIPAA and OSHA protocols, our leadership is hands-on in ensuring your critical assets are never compromised.
